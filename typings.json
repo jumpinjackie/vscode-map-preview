@@ -1,0 +1,9 @@
+{
+  "name": "vscode-map-preview",
+  "dependencies": {
+    "node-uuid": "registry:npm/node-uuid#1.4.7+20160503013124"
+  },
+  "globalDependencies": {
+    "file-url": "registry:dt/file-url#1.0.1+20151113120245"
+  }
+}
