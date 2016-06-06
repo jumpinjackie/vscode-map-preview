@@ -110,7 +110,17 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
                 try {
                     previewContent = \`${text}\`;
                     var map = new ol.Map({
-                        target: 'map'
+                        target: 'map',
+                        controls: ol.control.defaults({
+                            attributionOptions: {
+                                collapsible: false
+                            }
+                        }).extend([
+                            new ol.control.ScaleLine(),
+                            new ol.control.MousePosition(),
+                            new ol.control.ZoomSlider(),
+                            new ol.control.ZoomToExtent()
+                        ])
                     });
                     var preview = createPreviewSource({ featureProjection: 'EPSG:3857' });
                     var previewSource = preview.source;
@@ -119,7 +129,9 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
                         source: previewSource
                     });
                     map.addLayer(new ol.layer.Tile({
-                        source: new ol.source.OSM()
+                        source: new ol.source.Stamen({
+                            layer: 'toner'
+                        })
                     }));
                     map.addLayer(previewLayer);
                     var mapView = new ol.View();
