@@ -4,7 +4,7 @@
     "description": "VSCode extension for visually previewing geospatial file content (GeoJSON, KML, etc) on a map",
     "version": "0.1.0",
     "private": true,
-    "publisher": "Jackie Ng",
+    "publisher": "jumpinjackie",
     "engines": {
         "vscode": "^1.0.0"
     },
