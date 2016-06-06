@@ -48,10 +48,15 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
         const text = editor.document.getText();
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
-                <div id="format" style="position: absolute; right: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
+                <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
             </div>` +
             this.createLocalSource("ol.css", SourceType.STYLE) +
+            this.createLocalSource("ol3-layerswitcher.css", SourceType.STYLE) +
+            this.createLocalSource("ol3-popup.css", SourceType.STYLE) +
             this.createLocalSource("ol-debug.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol3-layerswitcher.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
+            this.createLocalSource("preview.js", SourceType.SCRIPT) +
             `<script type="text/javascript">
                 var previewContent = null;
 
@@ -63,80 +68,15 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
                     mapEl.innerHTML = errHtml;
                 }
 
-                function tryReadFeatures(format, text, options) {
-                    try {
-                        return format.readFeatures(text, options);
-                    } catch (e) {
-                        return null;
-                    }
-                }
-
-                function createPreviewSource(formatOptions) {
-                    var formats = {
-                        "ol.format.GPX": ol.format.GPX,
-                        "ol.format.GeoJSON": ol.format.GeoJSON,
-                        "ol.format.IGC": ol.format.IGC,
-                        "ol.format.KML": ol.format.KML,
-                        "ol.format.TopoJSON": ol.format.TopoJSON,
-                        "ol.format.WFS": ol.format.WFS,
-                        "ol.format.GML": ol.format.GML,
-                        "ol.format.GML2": ol.format.GML2,
-                        "ol.format.GML3": ol.format.GML3,
-                        "ol.format.WKT": ol.format.WKT
-                    };
-                    var features = [];
-                    var driverName = null;
-                    for (var formatName in formats) {
-                        var format = formats[formatName];
-                        var driver = new format();
-                        features = tryReadFeatures(driver, previewContent, formatOptions);
-                        if (features && features.length > 0) {
-                            driverName = formatName;
-                            break;
-                        }
-                    }
-                    if (!features || features.length == 0) {
-                        var attemptedFormats = ["GeoJSON", "KML", "GPX", "IGC", "TopoJSON"];
-                        throw new Error("Could not load preview content. Attempted the following formats:\\n\\n - " + attemptedFormats.join("\\n - "));
-                    }
-                    return {
-                        source: new ol.source.Vector({
-                            features: features
-                        }),
-                        driver: driverName 
-                    };
-                }
-
                 try {
                     previewContent = \`${text}\`;
-                    var map = new ol.Map({
-                        target: 'map',
-                        controls: ol.control.defaults({
-                            attributionOptions: {
-                                collapsible: false
-                            }
-                        }).extend([
-                            new ol.control.ScaleLine(),
-                            new ol.control.MousePosition(),
-                            new ol.control.ZoomSlider(),
-                            new ol.control.ZoomToExtent()
-                        ])
-                    });
                     var preview = createPreviewSource({ featureProjection: 'EPSG:3857' });
                     var previewSource = preview.source;
                     document.getElementById("format").innerHTML = "Using format: " + preview.driver;
                     var previewLayer = new ol.layer.Vector({
                         source: previewSource
                     });
-                    map.addLayer(new ol.layer.Tile({
-                        source: new ol.source.Stamen({
-                            layer: 'toner'
-                        })
-                    }));
-                    map.addLayer(previewLayer);
-                    var mapView = new ol.View();
-                    mapView.fit(previewSource.getExtent(), map.getSize());
-                    map.setView(mapView);
+                    initPreviewMap('map', previewLayer);
                 } catch (e) {
                     setError(e);
                 }
