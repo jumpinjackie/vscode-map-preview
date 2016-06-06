@@ -1,14 +1,26 @@
 {
     "name": "vscode-map-preview",
-    "displayName": "vscode-map-preview",
-    "description": "VSCode extension for visually previewing geographic data files (GeoJSON, KML, etc)",
-    "version": "0.0.1",
-    "publisher": "jumpinjackie",
+    "displayName": "VSCode Map Preview",
+    "description": "VSCode extension for visually previewing geospatial file content (GeoJSON, KML, etc) on a map",
+    "version": "0.1.0",
+    "private": true,
+    "publisher": "Jackie Ng",
     "engines": {
         "vscode": "^1.0.0"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jumpinjackie/vscode-map-preview"
+    },
     "categories": [
         "Other"
+    ],
+    "keywords": [
+        "map",
+        "gis",
+        "geospatial",
+        "geojson",
+        "kml"
     ],
     "activationEvents": [
         "onCommand:map.preview"

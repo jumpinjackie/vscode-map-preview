@@ -1,6 +1,6 @@
 # VSCode Map Preview
 
-This extension provides the ability to preview spatial data files / snippets on a map
+This extension provides the ability to preview spatial data files and snippets on a map
 
 # Supported Formats
 
@@ -30,4 +30,4 @@ See attached gif for an example:
 # Caveats/Limitations
 
  * The data you are previewing must be convertible to [Web Mercator](http://wiki.openstreetmap.org/wiki/EPSG:3857), in order to properly overlay against any of the provided base map layers.
- * Will probably choke on really large data files (this extension is really meant for quick-and-dirty previews of small files/snippets)
+ * Will probably choke on really large data files (this extension is really meant for quick-and-dirty previews of small files and snippets)
