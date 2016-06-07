@@ -46,7 +46,7 @@ function tryReadFeatures(format, text, options) {
     }
 }
 
-function createPreviewSource(formatOptions) {
+function createPreviewSource(previewContent, formatOptions, callback) {
     var formats = {
         "ol.format.GPX": ol.format.GPX,
         "ol.format.GeoJSON": ol.format.GeoJSON,
@@ -74,15 +74,18 @@ function createPreviewSource(formatOptions) {
         var attemptedFormats = ["GeoJSON", "KML", "GPX", "IGC", "TopoJSON"];
         throw new Error("Could not load preview content. Attempted the following formats:\\n\\n - " + attemptedFormats.join("\\n - "));
     }
-    return {
+    callback({
         source: new ol.source.Vector({
             features: features
         }),
         driver: driverName 
-    };
+    });
 }
 
-function initPreviewMap(domElId, previewLayer) {
+function initPreviewMap(domElId, previewSource) {
+    var previewLayer = new ol.layer.Vector({
+        source: previewSource
+    });
     var map = new ol.Map({
         target: 'map',
         controls: ol.control.defaults({

@@ -8,20 +8,46 @@ enum SourceType {
     STYLE
 }
 
-class TextDocumentContentProvider implements vscode.TextDocumentContentProvider {
+const SCHEME = "map-preview";
+const COMMAND_ID = "map.preview";
+
+function makePreviewUri(doc: vscode.TextDocument): vscode.Uri {
+    return vscode.Uri.parse(`${SCHEME}://map-preview/map-preview: ${doc.fileName}`);
+}
+
+class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
 
+    private resolveDocument(uri: vscode.Uri): vscode.TextDocument {
+        const matches = vscode.window.visibleTextEditors.filter(ed => {
+            return makePreviewUri(ed.document).toString() == uri.toString(); 
+        });
+        if (matches.length == 1) {
+            return matches[0].document;
+        } else {
+            return null;
+        }
+    }
+
     public provideTextDocumentContent(uri: vscode.Uri): string {
-        const content = this.createMapPreview();
-        return content;
+        const doc = this.resolveDocument(uri);
+        if (doc) {
+            const content = this.createMapPreview(doc);
+            return content;
+        } else {
+            return this.errorSnippet(`<h1>Error preparing preview</h1><p>Cannot resolve document for virtual document URI: ${uri.toString()}</p>`);
+        }
+    }
+
+    private errorSnippet(error: string): string {
+        return `
+            <body>
+                ${error}
+            </body>`;
     }
 
     get onDidChange(): vscode.Event<vscode.Uri> {
         return this._onDidChange.event;
-    }
-
-    public update(uri: vscode.Uri) {
-        this._onDidChange.fire(uri);
     }
 
     private createLocalSource(file: string, type: SourceType) {
@@ -42,10 +68,9 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
         }
     }
 
-    private createMapPreview() {
-        const editor = vscode.window.activeTextEditor;
+    private createMapPreview(doc: vscode.TextDocument) {
         //Should we languageId check here?
-        const text = editor.document.getText();
+        const text = doc.getText();
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
@@ -58,7 +83,6 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
             this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
             `<script type="text/javascript">
-                var previewContent = null;
 
                 function setError(e) {
                     var mapEl = document.getElementById("map");
@@ -69,54 +93,42 @@ class TextDocumentContentProvider implements vscode.TextDocumentContentProvider 
                 }
 
                 try {
-                    previewContent = \`${text}\`;
-                    var preview = createPreviewSource({ featureProjection: 'EPSG:3857' });
-                    var previewSource = preview.source;
-                    document.getElementById("format").innerHTML = "Using format: " + preview.driver;
-                    var previewLayer = new ol.layer.Vector({
-                        source: previewSource
+                    var content = \`${text}\`;
+                    createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function(preview) {
+                        var previewSource = preview.source;
+                        document.getElementById("format").innerHTML = "Using format: " + preview.driver;
+                        initPreviewMap('map', previewSource);
                     });
-                    initPreviewMap('map', previewLayer);
                 } catch (e) {
                     setError(e);
                 }
             </script>
         </body>`;
     }
-
-    private errorSnippet(error: string): string {
-        return `
-            <body>
-                ${error}
-            </body>`;
-    }
 }
-
-const SCHEME = "map-preview";
-const COMMAND_ID = "map.preview";
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const provider = new TextDocumentContentProvider();
+    const provider = new PreviewDocumentContentProvider();
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
-    let disposable = vscode.commands.registerCommand(COMMAND_ID, () => {
-        const previewUri = vscode.Uri.parse(`${SCHEME}://map-preview/map-preview: ${vscode.window.activeTextEditor.document.fileName}`);
+    const command = vscode.commands.registerCommand(COMMAND_ID, () => {
+        const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
         return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-            /*
+            
             console.log("Previewed: " + previewUri.toString());
             vscode.commands.executeCommand('_webview.openDevTools').then(success2 => {
                 console.log("Opened webview's dev tools");
             }, fail2 => {
                 vscode.window.showErrorMessage(fail2);
             });
-            */
+            
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
     });
 
-    context.subscriptions.push(disposable, registration);
+    context.subscriptions.push(command, registration);
 }
 
 // this method is called when your extension is deactivated
