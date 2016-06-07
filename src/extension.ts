@@ -115,14 +115,17 @@ export function activate(context: vscode.ExtensionContext) {
     const command = vscode.commands.registerCommand(COMMAND_ID, () => {
         const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
         return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-            
+            /*
+            //There seems to be a timing problem here (need to wait a bit for the devtools to fire up?)
+            //So to ensure this is such a case, stick a breakpoint somewhere in provideTextDocumentContent() method
+            //of PreviewDocumentContentProvider and when it hits, wait a few moments before continuing
             console.log("Previewed: " + previewUri.toString());
             vscode.commands.executeCommand('_webview.openDevTools').then(success2 => {
                 console.log("Opened webview's dev tools");
             }, fail2 => {
                 vscode.window.showErrorMessage(fail2);
             });
-            
+            */
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
