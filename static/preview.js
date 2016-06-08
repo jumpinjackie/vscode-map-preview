@@ -28,8 +28,8 @@ function renderFeaturesHtml(selFeatures) {
                 continue;
             }
             html += "<tr>";
-            html += "<td><strong>" + key + "</strong></td>";
-            html += "<td>" + props[key] + "</td>";
+            html += "<td class='popup-attribute-key'>" + key + "</td>";
+            html += "<td class='popup-attribute-value'>" + props[key] + "</td>";
             html += "</tr>";
         }
     }
@@ -48,16 +48,16 @@ function tryReadFeatures(format, text, options) {
 
 function createPreviewSource(previewContent, formatOptions, callback) {
     var formats = {
-        "ol.format.GPX": ol.format.GPX,
-        "ol.format.GeoJSON": ol.format.GeoJSON,
-        "ol.format.IGC": ol.format.IGC,
-        "ol.format.KML": ol.format.KML,
-        "ol.format.TopoJSON": ol.format.TopoJSON,
-        "ol.format.WFS": ol.format.WFS,
-        "ol.format.GML": ol.format.GML,
-        "ol.format.GML2": ol.format.GML2,
-        "ol.format.GML3": ol.format.GML3,
-        "ol.format.WKT": ol.format.WKT
+        "GPX": ol.format.GPX,
+        "GeoJSON": ol.format.GeoJSON,
+        "IGC": ol.format.IGC,
+        "KML": ol.format.KML,
+        "TopoJSON": ol.format.TopoJSON,
+        "WFS": ol.format.WFS,
+        "GML": ol.format.GML,
+        "GML2": ol.format.GML2,
+        "GML3": ol.format.GML3,
+        "WKT": ol.format.WKT
     };
     var features = [];
     var driverName = null;
@@ -94,7 +94,14 @@ function initPreviewMap(domElId, previewSource) {
             }
         }).extend([
             new ol.control.ScaleLine(),
-            new ol.control.MousePosition(),
+            new ol.control.MousePosition({
+                //TODO: Make configurable, but for general purposes coordinates in lat/lng are more comprehensible than
+                //web mercator coordinates
+                projection: 'EPSG:4326',
+                coordinateFormat: function(coordinate) {
+                    return ol.coordinate.format(coordinate, 'Lat: {y}, Lng: {x}', 4);
+                }
+            }),
             new ol.control.ZoomSlider(),
             new ol.control.ZoomToExtent()
         ]),

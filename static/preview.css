@@ -1,0 +1,27 @@
+div.ol-popup {
+    background: #FFFFFF;
+}
+
+.popup-attribute-key {
+    font-weight: bold;
+    color: #000000;
+}
+
+.popup-attribute-value {
+    color: #000000;
+}
+
+.ol-mouse-position {
+    padding: 2px;
+    background: #FFFFFF;
+    color: #000000;
+}
+
+.ol-attribution {
+    background: #FFFFFF !important;
+}
+
+.layer-switcher {
+    background: #FFFFFF;
+    color: #000000;
+}

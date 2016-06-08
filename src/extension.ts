@@ -70,7 +70,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     private cleanText(text: string): string {
         const scrubRegexes = [
-            /<\!\[CDATA\[([\s\S]*)]]>/
+            /(<\!\[CDATA\[[\s\S]*?]]>)/g
         ];
         for (const regex of scrubRegexes) {
             text = text.replace(regex, "");
@@ -92,6 +92,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             this.createLocalSource("ol3-layerswitcher.js", SourceType.SCRIPT) +
             this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
+            this.createLocalSource("preview.css", SourceType.STYLE) +
             `<script type="text/javascript">
 
                 function setError(e) {
@@ -106,7 +107,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                     var content = \`${text}\`;
                     createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function(preview) {
                         var previewSource = preview.source;
-                        document.getElementById("format").innerHTML = "Using format: " + preview.driver;
+                        document.getElementById("format").innerHTML = "Format: " + preview.driver;
                         initPreviewMap('map', previewSource);
                     });
                 } catch (e) {
