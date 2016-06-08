@@ -12,6 +12,10 @@
         "type": "git",
         "url": "https://github.com/jumpinjackie/vscode-map-preview"
     },
+    "bugs": {
+        "url": "https://github.com/jumpinjackie/vscode-map-preview/issues"
+    },
+    "homepage": "https://github.com/jumpinjackie/vscode-map-preview/blob/master/README.md",
     "categories": [
         "Other"
     ],
@@ -30,6 +34,10 @@
         "commands": [{
             "command": "map.preview",
             "title": "Map Preview"
+        }],
+        "keybindings": [{
+            "command": "map.preview",
+            "key": "alt+m"
         }]
     },
     "scripts": {
