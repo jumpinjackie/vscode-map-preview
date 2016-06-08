@@ -68,9 +68,19 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         }
     }
 
+    private cleanText(text: string): string {
+        const scrubRegexes = [
+            /<\!\[CDATA\[([\s\S]*)]]>/
+        ];
+        for (const regex of scrubRegexes) {
+            text = text.replace(regex, "");
+        }
+        return text;
+    }
+
     private createMapPreview(doc: vscode.TextDocument) {
         //Should we languageId check here?
-        const text = doc.getText();
+        const text = this.cleanText(doc.getText());
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
