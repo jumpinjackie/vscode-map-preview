@@ -19,13 +19,19 @@ Support for various formats is available through the format drivers provided by 
 
 # How to use this extension
 
-Open any plain text file (or active open document) and run the `Map Preview` command from the command palette. If the 
+Open any plain text file (or active open document) and run the `Map Preview` command (default keybinding: `ALT+M`) from the command palette. If the 
 text content checks out as any of the above supported formats, it will be parsed into vector feature data
 to be shown on an interactive map in the HTML preview pane.
 
 See attached gif for an example:
 
- ![](doc/map_preview.gif)
+ ![](https://github.com/jumpinjackie/vscode-map-preview/blob/master/doc/map_preview.gif)
+
+Any content not recognized by the preview command (ie. Doesn't check out as any of the above formats) will cause the following error to be shown
+
+ ![](https://github.com/jumpinjackie/vscode-map-preview/blob/master/doc/preview_error.png)
+
+If you believe this to be incorrect (ie. You have legitimate content that should be one of the above formats), please [report an issue on this](https://github.com/jumpinjackie/vscode-map-preview/issues)
 
 # Caveats/Limitations
 
