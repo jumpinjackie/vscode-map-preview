@@ -25,11 +25,11 @@ to be shown on an interactive map in the HTML preview pane.
 
 See attached gif for an example:
 
- ![](https://github.com/jumpinjackie/vscode-map-preview/blob/master/doc/map_preview.gif)
+ ![](https://github.com/jumpinjackie/vscode-map-preview/raw/master/doc/map_preview.gif)
 
 Any content not recognized by the preview command (ie. Doesn't check out as any of the above formats) will cause the following error to be shown
 
- ![](https://github.com/jumpinjackie/vscode-map-preview/blob/master/doc/preview_error.png)
+ ![](https://github.com/jumpinjackie/vscode-map-preview/raw/master/doc/preview_error.png)
 
 If you believe this to be incorrect (ie. You have legitimate content that should be one of the above formats), please [report an issue on this](https://github.com/jumpinjackie/vscode-map-preview/issues)
 
