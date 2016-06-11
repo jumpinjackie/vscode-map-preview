@@ -35,5 +35,5 @@ If you believe this to be incorrect (ie. You have legitimate content that should
 
 # Caveats/Limitations
 
- * The data you are previewing must be convertible to [Web Mercator](http://wiki.openstreetmap.org/wiki/EPSG:3857), in order to properly overlay against any of the provided base map layers.
+ * The data you are previewing must be transformable to [EPSG:3857 (Web Mercator) coordinates](http://wiki.openstreetmap.org/wiki/EPSG:3857), in order to properly overlay against any of the provided base map layers. If that previous sentence didn't make much sense, the data you are previewing should be in latitude/longitude (known as EPSG:4326) or some other coordinate system that [has an EPSG code representation](http://epsg.io/) 
  * Will probably choke on really large data files (this extension is really meant for quick-and-dirty previews of small files and snippets)
