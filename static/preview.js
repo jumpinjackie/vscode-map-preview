@@ -71,8 +71,8 @@ function createPreviewSource(previewContent, formatOptions, callback) {
         }
     }
     if (!features || features.length == 0) {
-        var attemptedFormats = ["GeoJSON", "KML", "GPX", "IGC", "TopoJSON"];
-        throw new Error("Could not load preview content. Attempted the following formats:\\n\\n - " + attemptedFormats.join("\\n - "));
+        var attemptedFormats = Object.keys(formats);
+        throw new Error("Could not load preview content. Attempted the following formats:<br/><br/><ul><li>" + attemptedFormats.join("</li><li>") + "</ul></li><p>Please make sure your document content is one of the above formats</p>");
     }
     callback({
         source: new ol.source.Vector({

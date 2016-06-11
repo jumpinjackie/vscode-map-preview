@@ -98,7 +98,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 function setError(e) {
                     var mapEl = document.getElementById("map");
                     var errHtml = "<h1>An error occurred rendering preview</h1>";
-                    errHtml += "<p>" + e.name + ": " + e.message + "</p>";
+                    //errHtml += "<p>" + e.name + ": " + e.message + "</p>";
                     errHtml += "<pre>" + e.stack + "</pre>";
                     mapEl.innerHTML = errHtml;
                 }
