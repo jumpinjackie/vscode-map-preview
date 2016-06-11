@@ -70,10 +70,12 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     private cleanText(text: string): string {
         const scrubRegexes = [
-            /(<\!\[CDATA\[[\s\S]*?]]>)/g
+            { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" }, //CDATA blocks in XML
+            { regex: /`/g, replace: "\\`" },                      //Backticks
+            { regex: /\${/g, replace: "\\${" }                    //Start of ES6 template string placeholder
         ];
-        for (const regex of scrubRegexes) {
-            text = text.replace(regex, "");
+        for (const r of scrubRegexes) {
+            text = text.replace(r.regex, r.replace);
         }
         return text;
     }
