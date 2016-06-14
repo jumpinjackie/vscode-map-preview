@@ -1,4 +1,5 @@
 'use strict';
+import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import fileUrl = require('file-url');
@@ -33,6 +34,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         const doc = this.resolveDocument(uri);
         if (doc) {
             const content = this.createMapPreview(doc);
+            //fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
             return content;
         } else {
             return this.errorSnippet(`<h1>Error preparing preview</h1><p>Cannot resolve document for virtual document URI: ${uri.toString()}</p>`);
@@ -70,6 +72,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     private cleanText(text: string): string {
         const scrubRegexes = [
+            { regex: /\\(?!\\|\/|\})/g, replace: "\\\\" },        //Existing backslashes
             { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" }, //CDATA blocks in XML
             { regex: /`/g, replace: "\\`" },                      //Backticks
             { regex: /\${/g, replace: "\\${" }                    //Start of ES6 template string placeholder
