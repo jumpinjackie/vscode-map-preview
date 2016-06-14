@@ -1,3 +1,7 @@
+# 0.2.2
+
+ * Additional character escaping fixes
+
 # 0.2.1
 
  * Clean up error message when previewing unknown content
