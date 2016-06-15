@@ -1,3 +1,8 @@
+# Next
+
+ * #8: Support for configurable coordinate display
+ * #2: Support for configurable styles for preview layer
+
 # 0.2.2
 
  * Additional character escaping fixes

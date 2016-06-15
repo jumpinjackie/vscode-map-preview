@@ -40,10 +40,50 @@
                     "default": "EPSG:4326",
                     "description": "The projection to use (default: EPSG:4326)"
                 },
-                "map.preview.coordinateDisplay.coordinateFormat": {
+                "map.preview.coordinateDisplay.format": {
                     "type": "string",
                     "default": "Lat: {y}, Lng: {x}",
                     "description": "A format string describing how coordinates are to be formatted. The format string must contain the {x} and {y} coordinate placeholder tokens" 
+                },
+                "map.preview.style.line.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(49, 159, 211, 1)",
+                    "description": "The default color to use for line strokes. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.line.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of line strokes. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.polygon.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(49, 159, 211, 1)",
+                    "description": "The default color to use for polygon borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.polygon.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of polygon borders. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.polygon.fill.color": {
+                    "type": "string",
+                    "default": "rgba(49, 159, 211, 0.1)",
+                    "description": "The default color to use for polygon fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.point.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(49, 159, 211, 1)",
+                    "description": "The default color to use for point borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.point.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of point borders. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.style.point.fill.color": {
+                    "type": "string",
+                    "default": "rgba(49, 159, 211, 0.2)",
+                    "description": "The default color to use for point fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 }
             }
         },

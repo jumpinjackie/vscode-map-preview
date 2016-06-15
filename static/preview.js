@@ -82,9 +82,42 @@ function createPreviewSource(previewContent, formatOptions, callback) {
     });
 }
 
-function initPreviewMap(domElId, previewSource, coordSettings) {
+function initPreviewMap(domElId, preview, previewSettings) {
+    var polygonStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke(previewSettings.style.polygon.stroke),
+        fill: new ol.style.Fill(previewSettings.style.polygon.fill)
+    });
+    var lineStyle = new ol.style.Style({
+        fill: new ol.style.Stroke({
+            color: previewSettings.style.line.stroke.color
+        }),
+        stroke: new ol.style.Stroke(previewSettings.style.line.stroke)
+    });
+    var pointStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: 5,
+            stroke: new ol.style.Stroke(previewSettings.style.point.stroke),
+            fill: new ol.style.Fill(previewSettings.style.point.fill)
+        })
+    });
     var previewLayer = new ol.layer.Vector({
-        source: previewSource
+        source: preview.source,
+        //NOTE: Has no effect for KML, which is fine because it has its own style def that OL
+        //wisely steps aside
+        style: function (feature, resolution) {
+            var geom = feature.getGeometry();
+            if (geom) {
+                var geomType = geom.getType();
+                if (geomType.indexOf("Polygon") >= 0) {
+                    return polygonStyle;
+                } else if (geomType.indexOf("Line") >= 0) {
+                    return lineStyle;
+                } else if (geomType.indexOf("Point") >= 0) {
+                    return pointStyle;
+                }
+            }
+            return null;
+        }
     });
     var map = new ol.Map({
         target: 'map',
@@ -95,9 +128,9 @@ function initPreviewMap(domElId, previewSource, coordSettings) {
         }).extend([
             new ol.control.ScaleLine(),
             new ol.control.MousePosition({
-                projection: (coordSettings.projection || 'EPSG:4326'),
+                projection: (previewSettings.coordinateDisplay.projection || 'EPSG:4326'),
                 coordinateFormat: function(coordinate) {
-                    return ol.coordinate.format(coordinate, (coordSettings.format || 'Lat: {y}, Lng: {x}'), 4);
+                    return ol.coordinate.format(coordinate, (previewSettings.coordinateDisplay.format || 'Lat: {y}, Lng: {x}'), 4);
                 }
             }),
             new ol.control.ZoomSlider(),
@@ -174,7 +207,7 @@ function initPreviewMap(domElId, previewSource, coordSettings) {
         ]
     });
     var mapView = new ol.View();
-    mapView.fit(previewSource.getExtent(), map.getSize());
+    mapView.fit(preview.source.getExtent(), map.getSize());
     map.setView(mapView);
     var popup = new ol.Overlay.Popup();
     map.addOverlay(popup);

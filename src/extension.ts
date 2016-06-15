@@ -34,7 +34,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         const doc = this.resolveDocument(uri);
         if (doc) {
             const content = this.createMapPreview(doc);
-            //fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
+            fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
             return content;
         } else {
             return this.errorSnippet(`<h1>Error preparing preview</h1><p>Cannot resolve document for virtual document URI: ${uri.toString()}</p>`);
@@ -86,7 +86,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     private createMapPreview(doc: vscode.TextDocument) {
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
-        const coordDisplay = vscode.workspace.getConfiguration("map.preview.coordinateDisplay");
+        const config = vscode.workspace.getConfiguration("map.preview");
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
@@ -110,11 +110,11 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 }
 
                 try {
+                    var previewConfig = ${JSON.stringify(config)};
                     var content = \`${text}\`;
-                    createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function(preview) {
-                        var previewSource = preview.source;
+                    createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function (preview) {
                         document.getElementById("format").innerHTML = "Format: " + preview.driver;
-                        initPreviewMap('map', previewSource, { projection: \`${coordDisplay.get("projection")}\`, format: \`${coordDisplay.get("coordinateFormat")}\` });
+                        initPreviewMap('map', preview, previewConfig);
                     });
                 } catch (e) {
                     setError(e);
