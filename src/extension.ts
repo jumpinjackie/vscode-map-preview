@@ -36,7 +36,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     }
 
     onDocumentOpened(e: vscode.TextDocument): void {
-        console.log(`Document opened ${e.uri}`);
+        //console.log(`Document opened ${e.uri}`);
         const uri = makePreviewUri(e);
         this._onDidChange.fire(uri);
     }
