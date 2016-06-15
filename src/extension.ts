@@ -9,8 +9,10 @@ enum SourceType {
     STYLE
 }
 
+const EPSG_REGEX = /^EPSG:\d+$/g;
 const SCHEME = "map-preview";
-const COMMAND_ID = "map.preview";
+const PREVIEW_COMMAND_ID = "map.preview";
+const PREVIEW_PROJ_COMMAND_ID = "map.preview-with-proj";
 
 function makePreviewUri(doc: vscode.TextDocument): vscode.Uri {
     return vscode.Uri.parse(`${SCHEME}://map-preview/map-preview: ${doc.fileName}`);
@@ -18,6 +20,23 @@ function makePreviewUri(doc: vscode.TextDocument): vscode.Uri {
 
 class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
+    private _projections = new Map<string, string>();
+
+    constructor() {
+
+    }
+
+    dispose() {
+        this._projections.clear();
+    }
+
+    public clearPreviewProjection(uri: vscode.Uri): void {
+        this._projections.delete(uri.toString());
+    }
+
+    public setPreviewProjection(uri: vscode.Uri, projection: string): void {
+        this._projections.set(uri.toString(), projection);
+    }
 
     private resolveDocument(uri: vscode.Uri): vscode.TextDocument {
         const matches = vscode.window.visibleTextEditors.filter(ed => {
@@ -33,7 +52,12 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     public provideTextDocumentContent(uri: vscode.Uri): string {
         const doc = this.resolveDocument(uri);
         if (doc) {
-            const content = this.createMapPreview(doc);
+            let proj = null;
+            const sUri = uri.toString();
+            if (this._projections.has(sUri)) {
+                proj = this._projections.get(sUri);
+            }
+            const content = this.createMapPreview(doc, proj);
             fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
             return content;
         } else {
@@ -83,7 +107,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         return text;
     }
 
-    private createMapPreview(doc: vscode.TextDocument) {
+    private createMapPreview(doc: vscode.TextDocument, projection: string = null) {
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
         const config = vscode.workspace.getConfiguration("map.preview");
@@ -110,9 +134,15 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 }
 
                 try {
+                    var previewProj = ${projection ? ('"' + projection + '"') : "null"};
                     var previewConfig = ${JSON.stringify(config)};
+                    previewConfig.sourceProjection = previewProj;
                     var content = \`${text}\`;
-                    createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function (preview) {
+                    var formatOptions = { featureProjection: 'EPSG:3857' };
+                    if (previewProj != null) {
+                        formatOptions.dataProjection = previewProj; 
+                    }
+                    createPreviewSource(content, formatOptions, function (preview) {
                         document.getElementById("format").innerHTML = "Format: " + preview.driver;
                         initPreviewMap('map', preview, previewConfig);
                     });
@@ -129,8 +159,9 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 export function activate(context: vscode.ExtensionContext) {
     const provider = new PreviewDocumentContentProvider();
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
-    const command = vscode.commands.registerCommand(COMMAND_ID, () => {
+    const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
         const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
+        provider.clearPreviewProjection(previewUri);
         return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
             /*
             //There seems to be a timing problem here (need to wait a bit for the devtools to fire up?)
@@ -148,7 +179,41 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    context.subscriptions.push(command, registration);
+    const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
+        const opts: vscode.InputBoxOptions = {
+            prompt: "Enter the EPSG code for your projection",
+            placeHolder: "EPSG:XXXX",
+            validateInput: (val) => {
+                if (!val.match(EPSG_REGEX)) {
+                    return "The projection is not of the form 'EPSG:XXXX', where XXXX is a number";
+                }
+                return null;
+            }
+        };
+        vscode.window.showInputBox(opts).then(val => {
+            if (val) {
+                const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
+                provider.setPreviewProjection(previewUri, val);
+                return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
+                    /*
+                    //There seems to be a timing problem here (need to wait a bit for the devtools to fire up?)
+                    //So to ensure this is such a case, stick a breakpoint somewhere in provideTextDocumentContent() method
+                    //of PreviewDocumentContentProvider and when it hits, wait a few moments before continuing
+                    console.log("Previewed: " + previewUri.toString());
+                    vscode.commands.executeCommand('_webview.openDevTools').then(success2 => {
+                        console.log("Opened webview's dev tools");
+                    }, fail2 => {
+                        vscode.window.showErrorMessage(fail2);
+                    });
+                    */
+                }, (reason) => {
+                    vscode.window.showErrorMessage(reason);
+                });
+            }
+        });
+    });
+
+    context.subscriptions.push(previewCommand, registration);
 }
 
 // this method is called when your extension is deactivated

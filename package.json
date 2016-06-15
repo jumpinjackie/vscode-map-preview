@@ -27,7 +27,8 @@
         "kml"
     ],
     "activationEvents": [
-        "onCommand:map.preview"
+        "onCommand:map.preview",
+        "onCommand:map.preview-with-proj"
     ],
     "main": "./out/src/extension",
     "contributes": {
@@ -91,12 +92,20 @@
             {
                 "command": "map.preview",
                 "title": "Map Preview"
+            },
+            {
+                "command": "map.preview-with-proj",
+                "title": "Map Preview (with projection)"
             }
         ],
         "keybindings": [
             {
                 "command": "map.preview",
                 "key": "alt+m"
+            },
+            {
+                "command": "map.preview-with-proj",
+                "key": "alt+m p"
             }
         ]
     },
