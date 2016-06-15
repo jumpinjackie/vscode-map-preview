@@ -25,8 +25,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     constructor() {
         this._subscriptions = vscode.Disposable.from(
-            vscode.workspace.onDidChangeTextDocument(this.onDocumentChanged.bind(this)),
-            vscode.window.onDidChangeTextEditorSelection(this.onChangedEditorSelection.bind(this))
+            vscode.workspace.onDidOpenTextDocument(this.onDocumentOpened.bind(this))
         );
     }
 
@@ -36,18 +35,10 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         this._onDidChange.dispose();
     }
 
-    onDocumentChanged(e: vscode.TextDocumentChangeEvent): void {
-        if (e.document === vscode.window.activeTextEditor.document) {
-            const uri = makePreviewUri(e.document);
-            this._onDidChange.fire(uri);
-        }
-    }
-
-    onChangedEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
-        if (e.textEditor === vscode.window.activeTextEditor) {
-            const uri = makePreviewUri(e.textEditor.document);
-            this._onDidChange.fire(uri);
-        }
+    onDocumentOpened(e: vscode.TextDocument): void {
+        console.log(`Document opened ${e.uri}`);
+        const uri = makePreviewUri(e);
+        this._onDidChange.fire(uri);
     }
 
     public triggerVirtualDocumentChange(uri: vscode.Uri): void {
@@ -82,7 +73,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 proj = this._projections.get(sUri);
             }
             const content = this.createMapPreview(doc, proj);
-            fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
+            //fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
             return content;
         } else {
             return this.errorSnippet(`<h1>Error preparing preview</h1><p>Cannot resolve document for virtual document URI: ${uri.toString()}</p>`);
@@ -194,8 +185,10 @@ export function activate(context: vscode.ExtensionContext) {
     const provider = new PreviewDocumentContentProvider();
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
-        const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
+        const doc = vscode.window.activeTextEditor.document;
+        const previewUri = makePreviewUri(doc);
         provider.clearPreviewProjection(previewUri);
+        provider.triggerVirtualDocumentChange(previewUri);
         vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
 
         }, (reason) => {
@@ -216,8 +209,10 @@ export function activate(context: vscode.ExtensionContext) {
         };
         vscode.window.showInputBox(opts).then(val => {
             if (val) {
-                const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
+                const doc = vscode.window.activeTextEditor.document;
+                const previewUri = makePreviewUri(doc);
                 provider.setPreviewProjection(previewUri, val);
+                provider.triggerVirtualDocumentChange(previewUri);
                 vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
                     
                 }, (reason) => {

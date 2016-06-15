@@ -3,6 +3,7 @@
  * #2: Support for configurable styles for preview layer
  * #8: Support for configurable coordinate display
  * #9: New command `Map Preview (with projection)`, allowing for data to be previewed with a declared projection (required for formats like WKT, that have no inferred geographic projection)
+ * #10: Fix subsequent previews not working properly
 
 # 0.2.2
 
