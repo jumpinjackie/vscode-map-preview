@@ -36,6 +36,20 @@
             "type": "object",
             "title": "Map Preview Configuration",
             "properties": {
+                "map.preview.defaultBaseLayer": {
+                    "type": "string",
+                    "enum": [
+                        "stamen-toner",
+                        "stamen-terrain",
+                        "stamen-water",
+                        "osm",
+                        "mapquest-sat",
+                        "mapquest-osm",
+                        "mapquest-hyb"
+                    ],
+                    "default": "stamen-toner",
+                    "description": "The default base layer to use for map previews"
+                },
                 "map.preview.debug.dumpContentPath": {
                     "type": "string",
                     "default": null,

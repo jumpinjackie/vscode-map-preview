@@ -143,7 +143,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     new ol.layer.Tile({
                         title: 'Stamen Toner',
                         type: 'base',
-                        visible: true,
+                        visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
                         source: new ol.source.Stamen({
                             layer: 'toner'
                         })
@@ -151,7 +151,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     new ol.layer.Tile({
                         title: 'Stamen Watercolor',
                         type: 'base',
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "stamen-water"),
                         source: new ol.source.Stamen({
                             layer: 'watercolor'
                         })
@@ -159,7 +159,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     new ol.layer.Tile({
                         title: 'Stamen Terrain',
                         type: 'base',
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
                         source: new ol.source.Stamen({
                             layer: 'terrain'
                         })
@@ -167,14 +167,14 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     new ol.layer.Tile({
                         title: 'OpenStreetMap',
                         type: 'base',
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "osm"),
                         source: new ol.source.OSM()
                     }),
                     new ol.layer.Group({
                         title: 'MapQuest - Satellite and roads',
                         type: 'base',
                         combine: true,
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "mapquest-hyb"),
                         layers: [
                             new ol.layer.Tile({
                                 source: new ol.source.MapQuest({layer: 'sat'})
@@ -187,13 +187,13 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     new ol.layer.Tile({
                         title: 'MapQuest - OSM',
                         type: 'base',
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "mapquest-osm"),
                         source: new ol.source.MapQuest({layer: 'osm'})
                     }),
                     new ol.layer.Tile({
                         title: 'MapQuest - Satellite',
                         type: 'base',
-                        visible: false,
+                        visible: (previewSettings.defaultBaseLayer == "mapquest-sat"),
                         source: new ol.source.MapQuest({layer: 'sat'})
                     })
                 ]
