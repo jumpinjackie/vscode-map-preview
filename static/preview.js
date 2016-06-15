@@ -95,7 +95,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
     });
     var pointStyle = new ol.style.Style({
         image: new ol.style.Circle({
-            radius: 5,
+            radius: previewSettings.style.point.radius || 5,
             stroke: new ol.style.Stroke(previewSettings.style.point.stroke),
             fill: new ol.style.Fill(previewSettings.style.point.fill)
         })
