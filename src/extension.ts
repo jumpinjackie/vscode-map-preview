@@ -21,13 +21,37 @@ function makePreviewUri(doc: vscode.TextDocument): vscode.Uri {
 class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvider {
     private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private _projections = new Map<string, string>();
+    private _subscriptions: vscode.Disposable;
 
     constructor() {
-
+        this._subscriptions = vscode.Disposable.from(
+            vscode.workspace.onDidChangeTextDocument(this.onDocumentChanged.bind(this)),
+            vscode.window.onDidChangeTextEditorSelection(this.onChangedEditorSelection.bind(this))
+        );
     }
 
     dispose() {
         this._projections.clear();
+        this._subscriptions.dispose();
+        this._onDidChange.dispose();
+    }
+
+    onDocumentChanged(e: vscode.TextDocumentChangeEvent): void {
+        if (e.document === vscode.window.activeTextEditor.document) {
+            const uri = makePreviewUri(e.document);
+            this._onDidChange.fire(uri);
+        }
+    }
+
+    onChangedEditorSelection(e: vscode.TextEditorSelectionChangeEvent): void {
+        if (e.textEditor === vscode.window.activeTextEditor) {
+            const uri = makePreviewUri(e.textEditor.document);
+            this._onDidChange.fire(uri);
+        }
+    }
+
+    public triggerVirtualDocumentChange(uri: vscode.Uri): void {
+        this._onDidChange.fire(uri);
     }
 
     public clearPreviewProjection(uri: vscode.Uri): void {
@@ -49,7 +73,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         }
     }
 
-    public provideTextDocumentContent(uri: vscode.Uri): string {
+    private generateDocumentContent(uri: vscode.Uri): string {
         const doc = this.resolveDocument(uri);
         if (doc) {
             let proj = null;
@@ -65,6 +89,12 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         }
     }
 
+    public provideTextDocumentContent(uri: vscode.Uri): string {
+        const content = this.generateDocumentContent(uri);
+        const sUri = uri.toString();
+        return content;
+    }
+
     private errorSnippet(error: string): string {
         return `
             <body>
@@ -72,6 +102,10 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             </body>`;
     }
 
+    /**
+     * Expose an event to signal changes of _virtual_ documents
+     * to the editor
+     */
     get onDidChange(): vscode.Event<vscode.Uri> {
         return this._onDidChange.event;
     }
@@ -162,18 +196,8 @@ export function activate(context: vscode.ExtensionContext) {
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
         const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
         provider.clearPreviewProjection(previewUri);
-        return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-            /*
-            //There seems to be a timing problem here (need to wait a bit for the devtools to fire up?)
-            //So to ensure this is such a case, stick a breakpoint somewhere in provideTextDocumentContent() method
-            //of PreviewDocumentContentProvider and when it hits, wait a few moments before continuing
-            console.log("Previewed: " + previewUri.toString());
-            vscode.commands.executeCommand('_webview.openDevTools').then(success2 => {
-                console.log("Opened webview's dev tools");
-            }, fail2 => {
-                vscode.window.showErrorMessage(fail2);
-            });
-            */
+        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
+
         }, (reason) => {
             vscode.window.showErrorMessage(reason);
         });
@@ -194,18 +218,8 @@ export function activate(context: vscode.ExtensionContext) {
             if (val) {
                 const previewUri = makePreviewUri(vscode.window.activeTextEditor.document);
                 provider.setPreviewProjection(previewUri, val);
-                return vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-                    /*
-                    //There seems to be a timing problem here (need to wait a bit for the devtools to fire up?)
-                    //So to ensure this is such a case, stick a breakpoint somewhere in provideTextDocumentContent() method
-                    //of PreviewDocumentContentProvider and when it hits, wait a few moments before continuing
-                    console.log("Previewed: " + previewUri.toString());
-                    vscode.commands.executeCommand('_webview.openDevTools').then(success2 => {
-                        console.log("Opened webview's dev tools");
-                    }, fail2 => {
-                        vscode.window.showErrorMessage(fail2);
-                    });
-                    */
+                vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
+                    
                 }, (reason) => {
                     vscode.window.showErrorMessage(reason);
                 });
