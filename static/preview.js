@@ -123,7 +123,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         target: 'map',
         controls: ol.control.defaults({
             attributionOptions: {
-                collapsible: false
+                collapsible: true
             }
         }).extend([
             new ol.control.ScaleLine(),
