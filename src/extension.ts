@@ -73,7 +73,17 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 proj = this._projections.get(sUri);
             }
             const content = this.createMapPreview(doc, proj);
-            //fs.writeFileSync("C:/temp/vscode_debug_content.html", content);
+            const debugSettings = vscode.workspace.getConfiguration("map.preview.debug");
+            if (debugSettings.has("dumpContentPath")) {
+                const dumpPath = debugSettings.get<string>("dumpContentPath");
+                if (dumpPath) {
+                    try {
+                        fs.writeFileSync(dumpPath, content);
+                    } catch (e) {
+                        vscode.window.showErrorMessage(`Error dumping preview content: ${e.message}`);
+                    }
+                }
+            }
             return content;
         } else {
             return this.errorSnippet(`<h1>Error preparing preview</h1><p>Cannot resolve document for virtual document URI: ${uri.toString()}</p>`);
