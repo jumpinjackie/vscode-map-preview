@@ -31,6 +31,22 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "configuration": {
+            "type": "object",
+            "title": "Map Preview Configuration",
+            "properties": {
+                "map.preview.coordinateDisplay.projection": {
+                    "type": "string",
+                    "default": "EPSG:4326",
+                    "description": "The projection to use (default: EPSG:4326)"
+                },
+                "map.preview.coordinateDisplay.coordinateFormat": {
+                    "type": "string",
+                    "default": "Lat: {y}, Lng: {x}",
+                    "description": "A format string describing how coordinates are to be formatted. The format string must contain the {x} and {y} coordinate placeholder tokens" 
+                }
+            }
+        },
         "commands": [
             {
                 "command": "map.preview",

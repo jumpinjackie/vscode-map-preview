@@ -86,6 +86,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     private createMapPreview(doc: vscode.TextDocument) {
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
+        const coordDisplay = vscode.workspace.getConfiguration("map.preview.coordinateDisplay");
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
@@ -113,7 +114,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                     createPreviewSource(content, { featureProjection: 'EPSG:3857' }, function(preview) {
                         var previewSource = preview.source;
                         document.getElementById("format").innerHTML = "Format: " + preview.driver;
-                        initPreviewMap('map', previewSource);
+                        initPreviewMap('map', previewSource, { projection: \`${coordDisplay.get("projection")}\`, format: \`${coordDisplay.get("coordinateFormat")}\` });
                     });
                 } catch (e) {
                     setError(e);

@@ -82,7 +82,7 @@ function createPreviewSource(previewContent, formatOptions, callback) {
     });
 }
 
-function initPreviewMap(domElId, previewSource) {
+function initPreviewMap(domElId, previewSource, coordSettings) {
     var previewLayer = new ol.layer.Vector({
         source: previewSource
     });
@@ -95,11 +95,9 @@ function initPreviewMap(domElId, previewSource) {
         }).extend([
             new ol.control.ScaleLine(),
             new ol.control.MousePosition({
-                //TODO: Make configurable, but for general purposes coordinates in lat/lng are more comprehensible than
-                //web mercator coordinates
-                projection: 'EPSG:4326',
+                projection: (coordSettings.projection || 'EPSG:4326'),
                 coordinateFormat: function(coordinate) {
-                    return ol.coordinate.format(coordinate, 'Lat: {y}, Lng: {x}', 4);
+                    return ol.coordinate.format(coordinate, (coordSettings.format || 'Lat: {y}, Lng: {x}'), 4);
                 }
             }),
             new ol.control.ZoomSlider(),
