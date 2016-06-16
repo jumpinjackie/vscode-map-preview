@@ -1,6 +1,6 @@
 # Extension Configuration
 
-Various aspects of this extension can be configured. You can configure such aspects by adding configuration settings to your `settings.json` 
+Starting with version `0.4.0`, various aspects of this extension can be configured. You can configure such aspects by adding configuration settings to your `settings.json` 
 
 This document describes the various configuration settings available
 
@@ -9,10 +9,10 @@ This document describes the various configuration settings available
 Type: `string`
 
 Valid Values:
- * `"stamen-toner"`
- * `"stamen-terrain"`
- * `"stamen-water"`
- * `"osm"`
+ * `"stamen-toner"` ([Stamen Toner](http://maps.stamen.com/toner))
+ * `"stamen-terrain"` ([Stamen Terrain](http://maps.stamen.com/terrain))
+ * `"stamen-water"` ([Stamen Watercolor](http://maps.stamen.com/watercolor))
+ * `"osm"` ([OpenStreetMap](http://www.openstreetmap.org/))
 
 Default Value: `"stamen-toner"`
 
@@ -24,7 +24,7 @@ Type: `string`
 
 Default Value: `null`
 
-Description: A file path to dump the current preview content to. Used for debugging purposes. Disabled (null) by default
+Description: A file path to dump the current preview content to. Used for debugging purposes. Disabled (`null`) by default
 
 ## map.preview.coordinateDisplay.projection
 
@@ -32,7 +32,7 @@ Type: `string`
 
 Default Value: `"EPSG:4326"`
 
-Description: The projection to use (default: EPSG:4326)
+Description: The projection to use (default: [EPSG:4326](http://epsg.io/4326))
 
 ## map.preview.coordinateDisplay.format
 
@@ -40,7 +40,7 @@ Type: `string`
 
 Default Value: `"Lat: {y}, Lng: {x}"`
 
-Description: A format string describing how coordinates are to be formatted. The format string must contain the {x} and {y} coordinate placeholder tokens
+Description: A format string describing how coordinates are to be formatted. The format string must contain the `{x}` and `{y}` coordinate placeholder tokens
 
 ## map.preview.style.line.stroke.color
 
