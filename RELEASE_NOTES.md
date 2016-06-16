@@ -1,4 +1,4 @@
-# Next
+# 0.4.0
 
  * [#2](https://github.com/jumpinjackie/vscode-map-preview/issues/2): Support for configurable styles (point/line/polygon) for preview layer
  * [#8](https://github.com/jumpinjackie/vscode-map-preview/issues/8): Support for configurable coordinate display
