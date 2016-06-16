@@ -106,6 +106,46 @@
                     "type": "string",
                     "default": "rgba(49, 159, 211, 0.2)",
                     "description": "The default color to use for point fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.line.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(255, 0, 0, 1)",
+                    "description": "The default color to use for line strokes for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.line.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of line strokes for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.polygon.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(255, 0, 0, 1)",
+                    "description": "The default color to use for polygon borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.polygon.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of polygon borders for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.polygon.fill.color": {
+                    "type": "string",
+                    "default": "rgba(255, 0, 0, 0.1)",
+                    "description": "The default color to use for polygon fills for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.point.stroke.color": {
+                    "type": "string",
+                    "default": "rgba(255, 0, 0, 1)",
+                    "description": "The default color to use for point borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.point.stroke.width": {
+                    "type": ["string", "number"],
+                    "default": 2,
+                    "description": "The default thickness of point borders for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.selectionStyle.point.fill.color": {
+                    "type": "string",
+                    "default": "rgba(255, 0, 0, 0.2)",
+                    "description": "The default color to use for point fills for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 }
             }
         },

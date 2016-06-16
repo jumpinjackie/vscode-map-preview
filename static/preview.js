@@ -82,6 +82,42 @@ function createPreviewSource(previewContent, formatOptions, callback) {
     });
 }
 
+function makeSelectInteraction(previewSettings) {
+    var polygonStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke(previewSettings.selectionStyle.polygon.stroke),
+        fill: new ol.style.Fill(previewSettings.selectionStyle.polygon.fill)
+    });
+    var lineStyle = new ol.style.Style({
+        fill: new ol.style.Stroke({
+            color: previewSettings.selectionStyle.line.stroke.color
+        }),
+        stroke: new ol.style.Stroke(previewSettings.selectionStyle.line.stroke)
+    });
+    var pointStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: previewSettings.selectionStyle.point.radius || 5,
+            stroke: new ol.style.Stroke(previewSettings.selectionStyle.point.stroke),
+            fill: new ol.style.Fill(previewSettings.selectionStyle.point.fill)
+        })
+    });
+    return new ol.interaction.Select({
+        style: function (feature, resolution) {
+            var geom = feature.getGeometry();
+            if (geom) {
+                var geomType = geom.getType();
+                if (geomType.indexOf("Polygon") >= 0) {
+                    return polygonStyle;
+                } else if (geomType.indexOf("Line") >= 0) {
+                    return lineStyle;
+                } else if (geomType.indexOf("Point") >= 0) {
+                    return pointStyle;
+                }
+            }
+            return null;
+        }
+    });
+}
+
 function initPreviewMap(domElId, preview, previewSettings) {
     var polygonStyle = new ol.style.Style({
         stroke: new ol.style.Stroke(previewSettings.style.polygon.stroke),
@@ -190,7 +226,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
     });
     map.addControl(layerSwitcher);
 
-    var select = new ol.interaction.Select();
+    var select = makeSelectInteraction(previewSettings);
     map.addInteraction(select);
 
     select.on('select', function(evt) {
