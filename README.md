@@ -33,6 +33,10 @@ Any content not recognized by the preview command (ie. Doesn't check out as any 
 
 If you believe this to be incorrect (ie. You have legitimate content that should be one of the above formats), please [report an issue on this](https://github.com/jumpinjackie/vscode-map-preview/issues)
 
+# Configuration
+
+Many aspects of this extension can be configurable. See [the configuration reference](https://github.com/jumpinjackie/vscode-map-preview/blob/master/CONFIGURATION.md)
+
 # Release Notes
 
 See [the release notes document](https://github.com/jumpinjackie/vscode-map-preview/blob/master/RELEASE_NOTES.md)
