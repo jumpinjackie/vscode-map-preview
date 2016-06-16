@@ -2,7 +2,7 @@
     "name": "vscode-map-preview",
     "displayName": "VSCode Map Preview",
     "description": "VSCode extension for visually previewing geospatial file content (GeoJSON, KML, etc) on a map",
-    "version": "0.2.2",
+    "version": "0.4.0",
     "private": true,
     "publisher": "jumpinjackie",
     "engines": {
@@ -60,7 +60,7 @@
                 "map.preview.coordinateDisplay.format": {
                     "type": "string",
                     "default": "Lat: {y}, Lng: {x}",
-                    "description": "A format string describing how coordinates are to be formatted. The format string must contain the {x} and {y} coordinate placeholder tokens" 
+                    "description": "A format string describing how coordinates are to be formatted. The format string must contain the {x} and {y} coordinate placeholder tokens"
                 },
                 "map.preview.style.line.stroke.color": {
                     "type": "string",
@@ -68,7 +68,10 @@
                     "description": "The default color to use for line strokes. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.style.line.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of line strokes. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
@@ -78,7 +81,10 @@
                     "description": "The default color to use for polygon borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.style.polygon.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of polygon borders. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
@@ -98,7 +104,10 @@
                     "description": "The default color to use for point borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.style.point.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of point borders. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
@@ -113,7 +122,10 @@
                     "description": "The default color to use for line strokes for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.selectionStyle.line.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of line strokes for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
@@ -123,7 +135,10 @@
                     "description": "The default color to use for polygon borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.selectionStyle.polygon.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of polygon borders for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
@@ -138,7 +153,10 @@
                     "description": "The default color to use for point borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.selectionStyle.point.stroke.width": {
-                    "type": ["string", "number"],
+                    "type": [
+                        "string",
+                        "number"
+                    ],
                     "default": 2,
                     "description": "The default thickness of point borders for selected features. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
