@@ -48,7 +48,7 @@ Type: `string`
 
 Default Value: `"rgba(49, 159, 211, 1)"`
 
-Description: The default color to use for line strokes. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for line strokes. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.style.line.stroke.width
 
@@ -64,7 +64,7 @@ Type: `string`
 
 Default Value: `"rgba(49, 159, 211, 1)"`
 
-Description: The default color to use for polygon borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for polygon borders. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.style.polygon.stroke.width
 
@@ -80,7 +80,7 @@ Type: `string`
 
 Default Value: `"rgba(49, 159, 211, 0.1)"`
 
-Description: The default color to use for polygon fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for polygon fills. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.style.point.radius
 
@@ -96,7 +96,7 @@ Type: `string`
 
 Default Value: `"rgba(49, 159, 211, 1)"`
 
-Description: The default color to use for point borders. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for point borders. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.style.point.stroke.width
 
@@ -112,7 +112,7 @@ Type: `string`
 
 Default Value: `"rgba(49, 159, 211, 0.2)"`
 
-Description: The default color to use for point fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for point fills. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.selectionStyle.line.stroke.color
 
@@ -120,7 +120,7 @@ Type: `string`
 
 Default Value: `"rgba(255, 0, 0, 1)"`
 
-Description: The default color to use for line strokes for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for line strokes for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.selectionStyle.line.stroke.width
 
@@ -136,7 +136,7 @@ Type: `string`
 
 Default Value: `"rgba(255, 0, 0, 1)"`
 
-Description: The default color to use for polygon borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for polygon borders for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.selectionStyle.polygon.stroke.width
 
@@ -152,7 +152,7 @@ Type: `string`
 
 Default Value: `"rgba(255, 0, 0, 0.1)"`
 
-Description: The default color to use for polygon fills for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for polygon fills for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.selectionStyle.point.stroke.color
 
@@ -160,7 +160,7 @@ Type: `string`
 
 Default Value: `"rgba(255, 0, 0, 1)"`
 
-Description: The default color to use for point borders for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for point borders for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 ## map.preview.selectionStyle.point.stroke.width
 
@@ -176,4 +176,4 @@ Type: `string`
 
 Default Value: `"rgba(255, 0, 0, 0.2)"`
 
-Description: The default color to use for point fills for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+Description: The default color to use for point fills for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
