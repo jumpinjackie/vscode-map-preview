@@ -42,10 +42,7 @@
                         "stamen-toner",
                         "stamen-terrain",
                         "stamen-water",
-                        "osm",
-                        "mapquest-sat",
-                        "mapquest-osm",
-                        "mapquest-hyb"
+                        "osm"
                     ],
                     "default": "stamen-toner",
                     "description": "The default base layer to use for map previews"

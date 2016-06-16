@@ -169,32 +169,6 @@ function initPreviewMap(domElId, preview, previewSettings) {
                         type: 'base',
                         visible: (previewSettings.defaultBaseLayer == "osm"),
                         source: new ol.source.OSM()
-                    }),
-                    new ol.layer.Group({
-                        title: 'MapQuest - Satellite and roads',
-                        type: 'base',
-                        combine: true,
-                        visible: (previewSettings.defaultBaseLayer == "mapquest-hyb"),
-                        layers: [
-                            new ol.layer.Tile({
-                                source: new ol.source.MapQuest({layer: 'sat'})
-                            }),
-                            new ol.layer.Tile({
-                                source: new ol.source.MapQuest({layer: 'hyb'})
-                            })
-                        ]
-                    }),
-                    new ol.layer.Tile({
-                        title: 'MapQuest - OSM',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "mapquest-osm"),
-                        source: new ol.source.MapQuest({layer: 'osm'})
-                    }),
-                    new ol.layer.Tile({
-                        title: 'MapQuest - Satellite',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "mapquest-sat"),
-                        source: new ol.source.MapQuest({layer: 'sat'})
                     })
                 ]
             }),
