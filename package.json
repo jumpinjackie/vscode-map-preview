@@ -186,6 +186,19 @@
                 "command": "map.preview-with-proj",
                 "key": "alt+m p"
             }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "*.geojson",
+                "url": "http://json.schemastore.org/geojson"
+            }
+        ],
+        "languages": [
+            {
+                "id": "json",
+                "aliases": ["GeoJSON"],
+                "extensions": [".geojson"]
+            }
         ]
     },
     "scripts": {
