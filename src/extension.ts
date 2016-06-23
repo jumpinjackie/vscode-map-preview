@@ -1,19 +1,20 @@
 'use strict';
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import PreviewDocumentContentProvider from './preview-document-content-provider';
+import OpenLayersDocumentContentProvider from './ol-document-content-provider';
 import * as extension from './core';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const provider = new PreviewDocumentContentProvider();
-    const registration = vscode.workspace.registerTextDocumentContentProvider(extension.PREVIEW_URI_SCHEME, provider);
-    const previewCommand = vscode.commands.registerCommand(extension.PREVIEW_COMMAND_ID, () => {
+    const olProvider = new OpenLayersDocumentContentProvider();
+    const olRegistration = vscode.workspace.registerTextDocumentContentProvider(extension.MAP_PREVIEW_URI_SCHEME, olProvider);
+
+    const mapPreviewCommand = vscode.commands.registerCommand(extension.MAP_PREVIEW_COMMAND_ID, () => {
         const doc = vscode.window.activeTextEditor.document;
-        const previewUri = extension.makePreviewUri(doc);
-        provider.clearPreviewProjection(previewUri);
-        provider.triggerVirtualDocumentChange(previewUri);
+        const previewUri = extension.makePreviewUri("map", doc);
+        olProvider.clearPreviewProjection(previewUri);
+        olProvider.triggerVirtualDocumentChange(previewUri);
         vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
 
         }, (reason) => {
@@ -21,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    const previewWithProjCommand = vscode.commands.registerCommand(extension.PREVIEW_PROJ_COMMAND_ID, () => {
+    const mapPreviewWithProjCommand = vscode.commands.registerCommand(extension.MAP_PREVIEW_PROJ_COMMAND_ID, () => {
         const opts: vscode.InputBoxOptions = {
             prompt: "Enter the EPSG code for your projection",
             placeHolder: "EPSG:XXXX",
@@ -35,9 +36,9 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInputBox(opts).then(val => {
             if (val) {
                 const doc = vscode.window.activeTextEditor.document;
-                const previewUri = extension.makePreviewUri(doc);
-                provider.setPreviewProjection(previewUri, val);
-                provider.triggerVirtualDocumentChange(previewUri);
+                const previewUri = extension.makePreviewUri("map", doc);
+                olProvider.setPreviewProjection(previewUri, val);
+                olProvider.triggerVirtualDocumentChange(previewUri);
                 vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
                     
                 }, (reason) => {
@@ -47,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    context.subscriptions.push(previewCommand, registration);
+    context.subscriptions.push(mapPreviewCommand, mapPreviewWithProjCommand, olRegistration);
 }
 
 // this method is called when your extension is deactivated

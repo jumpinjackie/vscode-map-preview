@@ -27,6 +27,7 @@
         "kml"
     ],
     "activationEvents": [
+        "onCommand:map.cs-preview",
         "onCommand:map.preview",
         "onCommand:map.preview-with-proj"
     ],
@@ -175,6 +176,10 @@
             {
                 "command": "map.preview-with-proj",
                 "title": "Map Preview (with projection)"
+            },
+            {
+                "command": "map.cs-preview",
+                "title": "Cesium Map Preview"
             }
         ],
         "keybindings": [

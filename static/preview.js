@@ -1,4 +1,4 @@
-function renderFeaturesHtml(selFeatures) {
+function OL_renderFeaturesHtml(selFeatures) {
     var html = "<div>";
     html += "<table>";
     var showFeatureHeader = (selFeatures.length > 1);
@@ -38,7 +38,7 @@ function renderFeaturesHtml(selFeatures) {
     return html;
 }
 
-function tryReadFeatures(format, text, options) {
+function OL_tryReadFeatures(format, text, options) {
     try {
         return format.readFeatures(text, options);
     } catch (e) {
@@ -46,7 +46,7 @@ function tryReadFeatures(format, text, options) {
     }
 }
 
-function createPreviewSource(previewContent, formatOptions, callback) {
+function OL_createPreviewSource(previewContent, formatOptions, callback) {
     var formats = {
         "GPX": ol.format.GPX,
         "GeoJSON": ol.format.GeoJSON,
@@ -64,7 +64,7 @@ function createPreviewSource(previewContent, formatOptions, callback) {
     for (var formatName in formats) {
         var format = formats[formatName];
         var driver = new format();
-        features = tryReadFeatures(driver, previewContent, formatOptions);
+        features = OL_tryReadFeatures(driver, previewContent, formatOptions);
         if (features && features.length > 0) {
             driverName = formatName;
             break;
@@ -82,7 +82,7 @@ function createPreviewSource(previewContent, formatOptions, callback) {
     });
 }
 
-function makeSelectInteraction(previewSettings) {
+function OL_makeSelectInteraction(previewSettings) {
     var polygonStyle = new ol.style.Style({
         stroke: new ol.style.Stroke(previewSettings.selectionStyle.polygon.stroke),
         fill: new ol.style.Fill(previewSettings.selectionStyle.polygon.fill)
@@ -118,7 +118,7 @@ function makeSelectInteraction(previewSettings) {
     });
 }
 
-function initPreviewMap(domElId, preview, previewSettings) {
+function OL_initPreviewMap(domElId, preview, previewSettings) {
     var polygonStyle = new ol.style.Style({
         stroke: new ol.style.Stroke(previewSettings.style.polygon.stroke),
         fill: new ol.style.Fill(previewSettings.style.polygon.fill)
@@ -226,12 +226,12 @@ function initPreviewMap(domElId, preview, previewSettings) {
     });
     map.addControl(layerSwitcher);
 
-    var select = makeSelectInteraction(previewSettings);
+    var select = OL_makeSelectInteraction(previewSettings);
     map.addInteraction(select);
 
     select.on('select', function(evt) {
         var selFeatures = evt.selected;
-        var html = renderFeaturesHtml(selFeatures);
+        var html = OL_renderFeaturesHtml(selFeatures);
         if (html)
             popup.show(evt.mapBrowserEvent.coordinate, html);
     });

@@ -3,17 +3,17 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as path from 'path';
 import fileUrl = require('file-url');
-import { makePreviewUri } from './core';
+import { makePreviewUri, PreviewKind } from './core';
 
-enum SourceType {
+export enum SourceType {
     SCRIPT,
     STYLE
 }
 
-export default class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvider {
-    private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
-    private _projections = new Map<string, string>();
-    private _subscriptions: vscode.Disposable;
+export abstract class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvider {
+    protected _onDidChange = new vscode.EventEmitter<vscode.Uri>();
+    protected _projections = new Map<string, string>();
+    protected _subscriptions: vscode.Disposable;
 
     constructor() {
         this._subscriptions = vscode.Disposable.from(
@@ -27,14 +27,27 @@ export default class PreviewDocumentContentProvider implements vscode.TextDocume
         this._onDidChange.dispose();
     }
 
+    protected abstract getPreviewKind(): PreviewKind;
+
     onDocumentOpened(e: vscode.TextDocument): void {
         //console.log(`Document opened ${e.uri}`);
-        const uri = makePreviewUri(e);
+        const uri = makePreviewUri(this.getPreviewKind(), e);
         this._onDidChange.fire(uri);
     }
 
     public triggerVirtualDocumentChange(uri: vscode.Uri): void {
         this._onDidChange.fire(uri);
+    }
+
+    private resolveDocument(uri: vscode.Uri): vscode.TextDocument {
+        const matches = vscode.window.visibleTextEditors.filter(ed => {
+            return makePreviewUri(this.getPreviewKind(), ed.document).toString() == uri.toString(); 
+        });
+        if (matches.length == 1) {
+            return matches[0].document;
+        } else {
+            return null;
+        }
     }
 
     public clearPreviewProjection(uri: vscode.Uri): void {
@@ -43,17 +56,6 @@ export default class PreviewDocumentContentProvider implements vscode.TextDocume
 
     public setPreviewProjection(uri: vscode.Uri, projection: string): void {
         this._projections.set(uri.toString(), projection);
-    }
-
-    private resolveDocument(uri: vscode.Uri): vscode.TextDocument {
-        const matches = vscode.window.visibleTextEditors.filter(ed => {
-            return makePreviewUri(ed.document).toString() == uri.toString(); 
-        });
-        if (matches.length == 1) {
-            return matches[0].document;
-        } else {
-            return null;
-        }
     }
 
     private generateDocumentContent(uri: vscode.Uri): string {
@@ -103,7 +105,7 @@ export default class PreviewDocumentContentProvider implements vscode.TextDocume
         return this._onDidChange.event;
     }
 
-    private createLocalSource(file: string, type: SourceType) {
+    protected createLocalSource(file: string, type: SourceType) {
         const source_path = fileUrl(
             path.join(
                 __dirname,
@@ -121,7 +123,7 @@ export default class PreviewDocumentContentProvider implements vscode.TextDocume
         }
     }
 
-    private cleanText(text: string): string {
+    protected cleanText(text: string): string {
         const scrubRegexes = [
             { regex: /\\(?!\\|\/|\})/g, replace: "\\\\" },        //Existing backslashes
             { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" }, //CDATA blocks in XML
@@ -134,49 +136,5 @@ export default class PreviewDocumentContentProvider implements vscode.TextDocume
         return text;
     }
 
-    private createMapPreview(doc: vscode.TextDocument, projection: string = null) {
-        //Should we languageId check here?
-        const text = this.cleanText(doc.getText());
-        const config = vscode.workspace.getConfiguration("map.preview");
-        return `<body>
-            <div id="map" style="width: 100%; height: 100%">
-                <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
-            </div>` +
-            this.createLocalSource("ol.css", SourceType.STYLE) +
-            this.createLocalSource("ol3-layerswitcher.css", SourceType.STYLE) +
-            this.createLocalSource("ol3-popup.css", SourceType.STYLE) +
-            this.createLocalSource("ol3cesium.js", SourceType.SCRIPT) +
-            this.createLocalSource("ol3-layerswitcher.js", SourceType.SCRIPT) +
-            this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
-            this.createLocalSource("preview.js", SourceType.SCRIPT) +
-            this.createLocalSource("preview.css", SourceType.STYLE) +
-            `<script type="text/javascript">
-
-                function setError(e) {
-                    var mapEl = document.getElementById("map");
-                    var errHtml = "<h1>An error occurred rendering preview</h1>";
-                    //errHtml += "<p>" + e.name + ": " + e.message + "</p>";
-                    errHtml += "<pre>" + e.stack + "</pre>";
-                    mapEl.innerHTML = errHtml;
-                }
-
-                try {
-                    var previewProj = ${projection ? ('"' + projection + '"') : "null"};
-                    var previewConfig = ${JSON.stringify(config)};
-                    previewConfig.sourceProjection = previewProj;
-                    var content = \`${text}\`;
-                    var formatOptions = { featureProjection: 'EPSG:3857' };
-                    if (previewProj != null) {
-                        formatOptions.dataProjection = previewProj; 
-                    }
-                    createPreviewSource(content, formatOptions, function (preview) {
-                        document.getElementById("format").innerHTML = "Format: " + preview.driver;
-                        initPreviewMap('map', preview, previewConfig);
-                    });
-                } catch (e) {
-                    setError(e);
-                }
-            </script>
-        </body>`;
-    }
+    protected abstract createMapPreview(doc: vscode.TextDocument, projection: string);
 }
