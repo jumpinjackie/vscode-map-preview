@@ -203,6 +203,11 @@
                 "id": "json",
                 "aliases": ["GeoJSON"],
                 "extensions": [".geojson"]
+            },
+            {
+                "id": "json",
+                "aliases": ["CZML"],
+                "extensions": [".czml"]
             }
         ]
     },

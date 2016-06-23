@@ -16,7 +16,10 @@ export default class OpenLayersDocumentContentProvider extends PreviewDocumentCo
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
         const config = vscode.workspace.getConfiguration("map.preview");
-        return `<body>
+        return `<!DOCTYPE html>
+        <html>
+        <head></head>
+        <body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
             </div>` +
@@ -55,6 +58,7 @@ export default class OpenLayersDocumentContentProvider extends PreviewDocumentCo
                     setError(e);
                 }
             </script>
-        </body>`;
+        </body>
+        </html>`;
     }
 }

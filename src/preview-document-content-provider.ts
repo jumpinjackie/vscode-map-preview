@@ -105,8 +105,8 @@ export abstract class PreviewDocumentContentProvider implements vscode.TextDocum
         return this._onDidChange.event;
     }
 
-    protected createLocalSource(file: string, type: SourceType) {
-        const source_path = fileUrl(
+    protected createStaticFileUri(file: string): string {
+        return fileUrl(
             path.join(
                 __dirname,
                 "..",
@@ -115,6 +115,10 @@ export abstract class PreviewDocumentContentProvider implements vscode.TextDocum
                 file
             )
         );
+    }
+
+    protected createLocalSource(file: string, type: SourceType) {
+        const source_path = this.createStaticFileUri(file);
         switch (type) {
             case SourceType.SCRIPT:
                 return `<script src="${source_path}" type="text/javascript"></script>`;
