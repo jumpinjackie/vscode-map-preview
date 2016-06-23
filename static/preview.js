@@ -238,8 +238,9 @@ function OL_initPreviewMap(domElId, preview, previewSettings) {
 }
 
 function CS_initPreviewMap(elementId, previewCzml, scriptUrlRoot) {
-    //Create the list of available providers we would like the user to select from.
-    //This example uses 3, OpenStreetMap, The Black Marble, and a single, non-streaming world image.
+    // We're not using bing here. If using bing, please provide your own API key
+    Cesium.BingMapsApi.defaultKey = null;
+
     var imageryViewModels = [
         new Cesium.ProviderViewModel({
             name: "OpenStreetMap",
@@ -255,7 +256,18 @@ function CS_initPreviewMap(elementId, previewCzml, scriptUrlRoot) {
             iconUrl: scriptUrlRoot + "/Cesium/Widgets/Images/ImageryProviders/stamenToner.png",
             creationFunction: function () {
                 return Cesium.createOpenStreetMapImageryProvider({
-                    url: "//stamen-tiles.a.ssl.fastly.net/toner/",
+                    url: "https://stamen-tiles.a.ssl.fastly.net/toner/",
+                    credit: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA"
+                });
+            }
+        }),
+        new Cesium.ProviderViewModel({
+            name: "Stamen Watercolor",
+            tooltip: "Stamen Watercolor",
+            iconUrl: scriptUrlRoot + "/Cesium/Widgets/Images/ImageryProviders/stamenWatercolor.png",
+            creationFunction: function () {
+                return Cesium.createOpenStreetMapImageryProvider({
+                    url: "https://stamen-tiles.a.ssl.fastly.net/watercolor/",
                     credit: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA"
                 });
             }
