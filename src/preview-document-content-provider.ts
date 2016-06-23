@@ -117,6 +117,10 @@ export abstract class PreviewDocumentContentProvider implements vscode.TextDocum
         );
     }
 
+    protected createDevToolsLink(left: number, top: number): string {
+        return `<div style="position: absolute; left: ${left}; top: ${top}; z-index: 100; padding: 5px; background: white"><a href="command:_webview.openDevTools">Open DevTools</a></div>`;
+    }
+
     protected createLocalSource(file: string, type: SourceType) {
         const source_path = this.createStaticFileUri(file);
         switch (type) {

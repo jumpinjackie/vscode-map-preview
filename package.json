@@ -53,6 +53,11 @@
                     "default": null,
                     "description": "A file path to dump the current preview content to. Used for debugging purposes. Disabled (null) by default"
                 },
+                "map.preview.debug.insertDevToolsLink": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "If true, will insert a Chrome Dev Tools link into the HTML preview"
+                },
                 "map.preview.coordinateDisplay.projection": {
                     "type": "string",
                     "default": "EPSG:4326",

@@ -16,11 +16,15 @@ export default class CesiumDocumentContentProvider extends PreviewDocumentConten
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
         const staticRoot = this.createStaticFileUri("");
+        const config = vscode.workspace.getConfiguration("map.preview");
+        let devToolsLink = config.get<boolean>("debug.insertDevToolsLink") === true ? this.createDevToolsLink(10, 10) : "";
         return `<!DOCTYPE html>
 <html>
     <head></head>
     <body>
-        <div id="map" style="width: 100%; height: 100%"></div>` +
+        <div id="map" style="width: 100%; height: 100%">
+            ${devToolsLink}
+        </div>` +
         this.createLocalSource("Cesium/Widgets/widgets.css", SourceType.STYLE) +
         this.createLocalSource("Cesium/Cesium.js", SourceType.SCRIPT) +
         this.createLocalSource("preview.js", SourceType.SCRIPT) +

@@ -16,12 +16,14 @@ export default class OpenLayersDocumentContentProvider extends PreviewDocumentCo
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
         const config = vscode.workspace.getConfiguration("map.preview");
+        let devToolsLink = config.get<boolean>("debug.insertDevToolsLink") === true ? this.createDevToolsLink(40, 40) : "";
         return `<!DOCTYPE html>
 <html>
     <head></head>
     <body>
         <div id="map" style="width: 100%; height: 100%">
             <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
+            ${devToolsLink}
         </div>` +
         this.createLocalSource("ol.css", SourceType.STYLE) +
         this.createLocalSource("ol3-layerswitcher.css", SourceType.STYLE) +
