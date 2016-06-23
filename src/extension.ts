@@ -153,7 +153,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             this.createLocalSource("ol.css", SourceType.STYLE) +
             this.createLocalSource("ol3-layerswitcher.css", SourceType.STYLE) +
             this.createLocalSource("ol3-popup.css", SourceType.STYLE) +
-            this.createLocalSource("ol-debug.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol3cesium.js", SourceType.SCRIPT) +
             this.createLocalSource("ol3-layerswitcher.js", SourceType.SCRIPT) +
             this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
