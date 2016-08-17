@@ -18,9 +18,19 @@ div.ol-popup {
 }
 
 .ol-mouse-position {
+    right: 0px;
+    top: 0px;
     padding: 2px;
     background: #FFFFFF;
     color: #000000;
+}
+
+.ol-zoom {
+    top: 40px;
+}
+
+.ol-zoom-extent {
+    top: 90px;
 }
 
 .ol-attribution {
@@ -33,5 +43,5 @@ div.ol-popup {
 }
 
 .ol-zoomslider {
-    top: 110px;
+    top: 120px;
 }
