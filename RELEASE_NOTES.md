@@ -1,3 +1,6 @@
+# 0.4.2
+ * [#24](https://github.com/jumpinjackie/vscode-map-preview/issues/24): Zoom control cut off by format driver label (VSCode 1.4.x)
+ 
 # 0.4.1
  * [#23](https://github.com/jumpinjackie/vscode-map-preview/issues/23): Map Preview not full height on VSCode 1.3.x onwards
 
