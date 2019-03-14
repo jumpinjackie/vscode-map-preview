@@ -186,9 +186,9 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     }
 }
 
-function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, extensionPath: string) {
-    const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
-    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, `Map Preview: ${previewUri.path}`, column || vscode.ViewColumn.Two, {
+function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, fileName: string, extensionPath: string) {
+    //const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
+    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, `Map Preview: ${fileName}`, vscode.ViewColumn.Two, {
         // Enable javascript in the webview
         enableScripts: true,
 
@@ -208,10 +208,11 @@ export function activate(context: vscode.ExtensionContext) {
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
         const doc = vscode.window.activeTextEditor.document;
+        const docName = path.basename(doc.fileName);
         const previewUri = makePreviewUri(doc);
         provider.clearPreviewProjection(previewUri);
         provider.triggerVirtualDocumentChange(previewUri);
-        loadWebView(provider, previewUri, extensionPath);
+        loadWebView(provider, previewUri, docName, extensionPath);
     });
 
     const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
@@ -228,10 +229,11 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showInputBox(opts).then(val => {
             if (val) {
                 const doc = vscode.window.activeTextEditor.document;
+                const docName = path.basename(doc.fileName);
                 const previewUri = makePreviewUri(doc);
                 provider.setPreviewProjection(previewUri, val);
                 provider.triggerVirtualDocumentChange(previewUri);
-                loadWebView(provider, previewUri, extensionPath);
+                loadWebView(provider, previewUri, docName, extensionPath);
             }
         });
     });
