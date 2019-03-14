@@ -11,6 +11,7 @@ enum SourceType {
 
 const EPSG_REGEX = /^EPSG:\d+$/g;
 const SCHEME = "map-preview";
+const WEBVIEW_TYPE = "mapPreview";
 const PREVIEW_COMMAND_ID = "map.preview";
 const PREVIEW_PROJ_COMMAND_ID = "map.preview-with-proj";
 
@@ -23,7 +24,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     private _projections = new Map<string, string>();
     private _subscriptions: vscode.Disposable;
 
-    constructor() {
+    constructor(private extensionPath: string) {
         this._subscriptions = vscode.Disposable.from(
             vscode.workspace.onDidOpenTextDocument(this.onDocumentOpened.bind(this))
         );
@@ -112,15 +113,11 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     }
 
     private createLocalSource(file: string, type: SourceType) {
-        const source_path = fileUrl(
-            path.join(
-                __dirname,
-                "..",
-                "..",
-                "static",
-                file
-            )
+        const onDiskPath = vscode.Uri.file(
+            path.join(this.extensionPath, 'static', file)
         );
+    
+        const source_path = onDiskPath.with({ scheme: "vscode-resource" });
         switch (type) {
             case SourceType.SCRIPT:
                 return `<script src="${source_path}" type="text/javascript"></script>`;
@@ -189,21 +186,32 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     }
 }
 
+function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, extensionPath: string) {
+    const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
+    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, "Map Preview", column || vscode.ViewColumn.Two, {
+        // Enable javascript in the webview
+        enableScripts: true,
+
+        // And restrict the webview to only loading content from our extension's `static` directory.
+        localResourceRoots: [
+            vscode.Uri.file(path.join(extensionPath, 'static'))
+        ]
+    });
+    panel.webview.html = content.provideTextDocumentContent(previewUri);
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-    const provider = new PreviewDocumentContentProvider();
+    const extensionPath = context.extensionPath;
+    const provider = new PreviewDocumentContentProvider(extensionPath);
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
         const doc = vscode.window.activeTextEditor.document;
         const previewUri = makePreviewUri(doc);
         provider.clearPreviewProjection(previewUri);
         provider.triggerVirtualDocumentChange(previewUri);
-        vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-
-        }, (reason) => {
-            vscode.window.showErrorMessage(reason);
-        });
+        loadWebView(provider, previewUri, extensionPath);
     });
 
     const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
@@ -223,11 +231,7 @@ export function activate(context: vscode.ExtensionContext) {
                 const previewUri = makePreviewUri(doc);
                 provider.setPreviewProjection(previewUri, val);
                 provider.triggerVirtualDocumentChange(previewUri);
-                vscode.commands.executeCommand('vscode.previewHtml', previewUri, vscode.ViewColumn.Two).then((success) => {
-                    
-                }, (reason) => {
-                    vscode.window.showErrorMessage(reason);
-                });
+                loadWebView(provider, previewUri, extensionPath);
             }
         });
     });
