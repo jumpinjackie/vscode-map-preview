@@ -1,3 +1,13 @@
+# 0.4.5
+
+This is a quick-and-dirty release to migrate away from the deprecated `vscode.previewHtml` API over to [the VSCode Webview API](https://code.visualstudio.com/api/extension-guides/webview). Everything should be as they were before the extension API migration.
+
+ * [#32](https://github.com/jumpinjackie/vscode-map-preview/issues/32): Update to use VS Code's webview API
+ * Updated min vscode requirement to `1.26.0`
+ * OpenLayers updated to `5.3.0`
+ * `ol-popup` updated to `4.0.0`
+ * `ol-layerswitcher` updated to `3.0.0`
+
 # 0.4.2
  * [#24](https://github.com/jumpinjackie/vscode-map-preview/issues/24): Zoom control cut off by format driver label (VSCode 1.4.x)
  
