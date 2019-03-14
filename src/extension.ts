@@ -148,11 +148,11 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
             </div>` +
             this.createLocalSource("ol.css", SourceType.STYLE) +
-            this.createLocalSource("ol3-layerswitcher.css", SourceType.STYLE) +
-            this.createLocalSource("ol3-popup.css", SourceType.STYLE) +
-            this.createLocalSource("ol-debug.js", SourceType.SCRIPT) +
-            this.createLocalSource("ol3-layerswitcher.js", SourceType.SCRIPT) +
-            this.createLocalSource("ol3-popup.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol-layerswitcher.css", SourceType.STYLE) +
+            this.createLocalSource("ol-popup.css", SourceType.STYLE) +
+            this.createLocalSource("ol.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol-layerswitcher.js", SourceType.SCRIPT) +
+            this.createLocalSource("ol-popup.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.css", SourceType.STYLE) +
             `<script type="text/javascript">
@@ -188,7 +188,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
 function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, extensionPath: string) {
     const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
-    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, "Map Preview", column || vscode.ViewColumn.Two, {
+    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, `Map Preview: ${previewUri.path}`, column || vscode.ViewColumn.Two, {
         // Enable javascript in the webview
         enableScripts: true,
 

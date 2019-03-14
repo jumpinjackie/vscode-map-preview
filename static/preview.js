@@ -219,7 +219,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
     var mapView = new ol.View();
     mapView.fit(preview.source.getExtent(), map.getSize());
     map.setView(mapView);
-    var popup = new ol.Overlay.Popup();
+    var popup = new Popup();
     map.addOverlay(popup);
     var layerSwitcher = new ol.control.LayerSwitcher({
         tipLabel: 'Legend' // Optional label for button
