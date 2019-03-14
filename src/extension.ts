@@ -58,7 +58,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         const matches = vscode.window.visibleTextEditors.filter(ed => {
             return makePreviewUri(ed.document).toString() == uri.toString(); 
         });
-        if (matches.length == 1) {
+        if (matches.length >= 1) { //If we get more than one match, it's probably because the same document has been opened more than once (eg. split view)
             return matches[0].document;
         } else {
             return null;
