@@ -177,3 +177,19 @@ Type: `string`
 Default Value: `"rgba(255, 0, 0, 0.2)"`
 
 Description: The default color to use for point fills for selected features. This is an `rgba(r, g, b, a)` expression. NOTE: Doesn't affect KML if its features have been configured with inline styles
+
+## map.preview.style.vertex.radius (new in 0.4.7)
+
+Type: `number`
+
+Default Value: `3`
+
+Description: The default vertex radius in screen-space. Used to style vertices in lines and polygon layers. NOTE: Doesn't affect KML if its features have been configured with inline styles
+
+## map.preview.style.vertex.fill.color  (new in 0.4.7)
+
+Type: `string`
+
+Default Value: `"rgba(49, 159, 211, 1)"`
+
+Description: The default vertex color. Used to style vertices in lines and polygon layers. NOTE: Doesn't affect KML if its features have been configured with inline styles
