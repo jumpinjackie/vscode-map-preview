@@ -119,16 +119,27 @@ function makeSelectInteraction(previewSettings) {
 }
 
 function initPreviewMap(domElId, preview, previewSettings) {
-    var polygonStyle = new ol.style.Style({
+    var vertexStyle = new ol.style.Style({
+        image: new ol.style.Circle({
+            radius: previewSettings.style.vertex.radius,
+            fill: new ol.style.Fill({
+                color: previewSettings.style.vertex.fill.color
+            })
+        }),
+        geometry: function(feature) {
+            return new ol.geom.MultiPoint(feature.getGeometry().getCoordinates()[0]);
+        }
+    });
+    var polygonStyle = [new ol.style.Style({
         stroke: new ol.style.Stroke(previewSettings.style.polygon.stroke),
         fill: new ol.style.Fill(previewSettings.style.polygon.fill)
-    });
-    var lineStyle = new ol.style.Style({
+    }), vertexStyle];
+    var lineStyle = [new ol.style.Style({
         fill: new ol.style.Stroke({
             color: previewSettings.style.line.stroke.color
         }),
         stroke: new ol.style.Stroke(previewSettings.style.line.stroke)
-    });
+    }), vertexStyle];
     var pointStyle = new ol.style.Style({
         image: new ol.style.Circle({
             radius: previewSettings.style.point.radius || 5,
