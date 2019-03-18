@@ -150,6 +150,8 @@ function initPreviewMap(domElId, preview, previewSettings) {
                     return lineStyle;
                 } else if (geomType.indexOf("Point") >= 0) {
                     return pointStyle;
+                } else { //GeometryCollection
+                    return [pointStyle, lineStyle, polygonStyle];
                 }
             }
             return null;
