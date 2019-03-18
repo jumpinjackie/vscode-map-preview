@@ -1,3 +1,8 @@
+# 0.4.7
+
+ * [#34](https://github.com/jumpinjackie/vscode-map-preview/issues/34): Fix GeometryCollection instances not being styled
+ * [#33](https://github.com/jumpinjackie/vscode-map-preview/issues/33): Add configuration for vertex style for lines and polygons.
+
 # 0.4.6
 
 This is a quick-and-dirty release to migrate away from the deprecated `vscode.previewHtml` API over to [the VSCode Webview API](https://code.visualstudio.com/api/extension-guides/webview). Everything should be as they were before the extension API migration.
