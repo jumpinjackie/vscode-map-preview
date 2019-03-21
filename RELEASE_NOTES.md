@@ -1,3 +1,7 @@
+# 0.4.8
+
+ * [#33](https://github.com/jumpinjackie/vscode-map-preview/issues/33): Fix vertex style not displaying for certain geometry types.
+
 # 0.4.7
 
  * [#34](https://github.com/jumpinjackie/vscode-map-preview/issues/34): Fix GeometryCollection instances not being styled
