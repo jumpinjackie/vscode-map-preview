@@ -127,7 +127,46 @@ function initPreviewMap(domElId, preview, previewSettings) {
             })
         }),
         geometry: function(feature) {
-            return new ol.geom.MultiPoint(feature.getGeometry().getCoordinates()[0]);
+            var g = feature.getGeometry();
+            var gt = g.getType();
+            switch (gt) 
+            {
+                case "MultiPolygon":
+                {
+                    var coords = g.getCoordinates();
+                    var geoms = [];
+                    for (var i = 0; i < coords.length; i++) {
+                        var polyCoords = coords[i];
+                        for (var j = 0; j < polyCoords.length; j++) {
+                            var pts = polyCoords[j];
+                            geoms.push(new ol.geom.MultiPoint(pts));
+                        }
+                    }
+                    return new ol.geom.GeometryCollection(geoms);
+                }
+                case "MultiLineString":
+                case "Polygon":
+                {
+                    var coords = g.getCoordinates();
+                    var geoms = [];
+                    for (var i = 0; i < coords.length; i++) {
+                        var pts = coords[i];
+                        geoms.push(new ol.geom.MultiPoint(pts));
+                    }
+                    return new ol.geom.GeometryCollection(geoms);
+                }
+                case "LineString":
+                {
+                    var coords = g.getCoordinates();
+                    var geoms = [];
+                    for (var i = 0; i < coords.length; i++) {
+                        var pts = coords[i];
+                        geoms.push(new ol.geom.Point(pts));
+                    }
+                    return new ol.geom.GeometryCollection(geoms);
+                }
+            }
+            return g;
         }
     });
     var polygonStyle = [new ol.style.Style({
