@@ -6,16 +6,16 @@ This extension provides the ability to preview spatial data files and snippets o
 
 Support for various formats is available through the format drivers provided by the [OpenLayers](http://openlayers.org/) library
 
- * [GPX](http://openlayers.org/en/latest/apidoc/ol.format.GPX.html)
- * [GeoJSON](http://openlayers.org/en/latest/apidoc/ol.format.GeoJSON.html)
- * [IGC](http://openlayers.org/en/latest/apidoc/ol.format.IGC.html)
- * [KML](http://openlayers.org/en/latest/apidoc/ol.format.KML.html)
- * [TopoJSON](http://openlayers.org/en/latest/apidoc/ol.format.TopoJSON.html)
- * [WFS](http://openlayers.org/en/latest/apidoc/ol.format.WFS.html)
- * [GML](http://openlayers.org/en/latest/apidoc/ol.format.GML.html)
- * [GML2](http://openlayers.org/en/latest/apidoc/ol.format.GML2.html)
- * [GML3](http://openlayers.org/en/latest/apidoc/ol.format.GML3.html)
- * [WKT](http://openlayers.org/en/latest/apidoc/ol.format.WKT.html)
+ * [GPX](https://openlayers.org/en/latest/apidoc/module-ol_format_GPX.html)
+ * [GeoJSON](https://openlayers.org/en/latest/apidoc/module-ol_format_GeoJSON.html)
+ * [IGC](https://openlayers.org/en/latest/apidoc/module-ol_format_IGC.html)
+ * [KML](https://openlayers.org/en/latest/apidoc/module-ol_format_KML.html)
+ * [TopoJSON](http://openlayers.org/en/latest/apidoc/module-ol_format_TopoJSON.html)
+ * [WFS](http://openlayers.org/en/latest/apidoc/module-ol_format_WFS.html)
+ * [GML](http://openlayers.org/en/latest/apidoc/module-ol_format_GML.html)
+ * [GML2](http://openlayers.org/en/latest/apidoc/module-ol_format_GML2.html)
+ * [GML3](http://openlayers.org/en/latest/apidoc/module-ol_format_GML3.html)
+ * [WKT](http://openlayers.org/en/latest/apidoc/module-ol_format_WKT.html)
 
 # How to use this extension
 
