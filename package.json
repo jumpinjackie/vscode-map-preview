@@ -93,15 +93,20 @@
                     "default": "rgba(49, 159, 211, 0.1)",
                     "description": "The default color to use for polygon fills. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
+                "map.preview.style.vertex.enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Controls whether to style vertices of line and polygon features"
+                },
                 "map.preview.style.vertex.radius": {
                     "type": "number",
                     "default": 3,
-                    "description": "The default vertex radius in screen-space. Used to style vertices in lines and polygon layers. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                    "description": "The default vertex radius in screen-space. Used to style vertices in lines and polygon layers. If `map.preview.style.vertex.enabled` is false, this setting has no effect. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.style.vertex.fill.color": {
                     "type": "string",
                     "default": "rgba(49, 159, 211, 1)",
-                    "description": "The default vertex color. Used to style vertices in lines and polygon layers. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                    "description": "The default vertex color. Used to style vertices in lines and polygon layers. If `map.preview.style.vertex.enabled` is false, this setting has no effect. NOTE: Doesn't affect KML if its features have been configured with inline styles"
                 },
                 "map.preview.style.point.radius": {
                     "type": "number",
