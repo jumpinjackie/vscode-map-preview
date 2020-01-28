@@ -1,3 +1,18 @@
+# 0.5.0
+
+ * [#42](https://github.com/jumpinjackie/vscode-map-preview/issues/42): Update OpenLayers to 6.1.1
+ * [#43](https://github.com/jumpinjackie/vscode-map-preview/issues/43): New editor UI buttons to invoke preview commands
+ * [#13](https://github.com/jumpinjackie/vscode-map-preview/issues/13): Can now preview CSV files as point data assuming point coordinate columns exist (refer to new configuration properties below)
+ * [#16](https://github.com/jumpinjackie/vscode-map-preview/issues/16): Support for custom projections
+    * [#44](https://github.com/jumpinjackie/vscode-map-preview/issues/44): The `Map Preview (with projection)` command now lets you pick a projection from the list of registered custom projections instead of requiring you to manually enter an EPSG code.
+ * New configuration properties
+    * [#41](https://github.com/jumpinjackie/vscode-map-preview/issues/41): Toggle-able vertex styles for line/polygon features
+    * [#16](https://github.com/jumpinjackie/vscode-map-preview/issues/16): Defining custom projections
+    * [#13](https://github.com/jumpinjackie/vscode-map-preview/issues/13): X/Y point coordinate column aliases when detecting CSV support
+ * Fixes to corner cases when previewing certain content
+    * [#39](https://github.com/jumpinjackie/vscode-map-preview/issues/39): Scrub out KML icon elements
+    * [#37](https://github.com/jumpinjackie/vscode-map-preview/issues/37): Fix backslash escaping
+
 # 0.4.8
 
  * [#33](https://github.com/jumpinjackie/vscode-map-preview/issues/33): Fix vertex style not displaying for certain geometry types.
