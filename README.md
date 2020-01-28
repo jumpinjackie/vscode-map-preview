@@ -6,7 +6,7 @@ This extension provides the ability to preview spatial data files and snippets o
 
 Support for various formats is available through the format drivers provided by the [OpenLayers](http://openlayers.org/) library
 
- * CSV files
+ * CSV files (as of `0.5.0`)
  * [GPX](https://openlayers.org/en/latest/apidoc/module-ol_format_GPX.html)
  * [GeoJSON](https://openlayers.org/en/latest/apidoc/module-ol_format_GeoJSON.html)
  * [IGC](https://openlayers.org/en/latest/apidoc/module-ol_format_IGC.html)
