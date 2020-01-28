@@ -128,7 +128,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     private cleanText(text: string): string {
         const scrubRegexes = [
-            { regex: /\\(?!\\|\/|\})/g, replace: "\\\\" },          //Existing backslashes
+            { regex: /\\/g, replace: "\\\\" },                      //Existing backslashes
             { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" },   //CDATA blocks in XML
             { regex: /(<Icon>[\s\S]*?<\/Icon>)/g, replace: "" },    //KML icons are near un-translateable for us
             { regex: /`/g, replace: "\\`" },                        //Backticks
