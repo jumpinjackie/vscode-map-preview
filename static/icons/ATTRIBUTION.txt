@@ -1,0 +1,5 @@
+Icons courtesy of blueprint.js icon set (https://github.com/palantir/blueprint/tree/develop/packages/icons)
+
+"Dark" variants have been manually edited in InkScape
+
+Blueprint.js is licensed under the Apache 2.0 License

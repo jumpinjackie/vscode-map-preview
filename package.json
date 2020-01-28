@@ -32,6 +32,20 @@
     ],
     "main": "./out/src/extension",
     "contributes": {
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "map.preview",
+                    "group": "navigation",
+                    "when": "resourceScheme == file"
+                },
+                {
+                    "command": "map.preview-with-proj",
+                    "group": "navigation",
+                    "when": "resourceScheme == file"
+                }
+            ]
+        },
         "configuration": {
             "type": "object",
             "title": "Map Preview Configuration",
@@ -216,12 +230,30 @@
                         }
                     },
                     "default": [
-                        { "xColumn": "x", "yColumn": "y" },
-                        { "xColumn": "lon", "yColumn": "lat" },
-                        { "xColumn": "long", "yColumn": "lat" },
-                        { "xColumn": "lng", "yColumn": "lat" },
-                        { "xColumn": "longitude", "yColumn": "latitude" },
-                        { "xColumn": "easting", "yColumn": "northing" }
+                        {
+                            "xColumn": "x",
+                            "yColumn": "y"
+                        },
+                        {
+                            "xColumn": "lon",
+                            "yColumn": "lat"
+                        },
+                        {
+                            "xColumn": "long",
+                            "yColumn": "lat"
+                        },
+                        {
+                            "xColumn": "lng",
+                            "yColumn": "lat"
+                        },
+                        {
+                            "xColumn": "longitude",
+                            "yColumn": "latitude"
+                        },
+                        {
+                            "xColumn": "easting",
+                            "yColumn": "northing"
+                        }
                     ],
                     "description": "A list of case-insensitive column name pairs to look for X/Y coordinates when attempting to preview a given CSV file"
                 }
@@ -230,11 +262,19 @@
         "commands": [
             {
                 "command": "map.preview",
-                "title": "Map Preview"
+                "title": "Map Preview",
+                "icon": {
+                    "light": "./static/icons/map-light.svg",
+                    "dark": "./static/icons/map-dark.svg"
+                }
             },
             {
                 "command": "map.preview-with-proj",
-                "title": "Map Preview (with projection)"
+                "title": "Map Preview (with projection)",
+                "icon": {
+                    "light": "./static/icons/map-proj-light.svg",
+                    "dark": "./static/icons/map-proj-dark.svg"
+                }
             }
         ],
         "keybindings": [
