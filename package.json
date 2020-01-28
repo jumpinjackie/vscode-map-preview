@@ -179,6 +179,25 @@
                     "type": "string",
                     "default": "rgba(255, 0, 0, 0.2)",
                     "description": "The default color to use for point fills for selected features. This is an rgba(r, g, b, a) expression. NOTE: Doesn't affect KML if its features have been configured with inline styles"
+                },
+                "map.preview.projections": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "title": "",
+                        "properties": {
+                            "epsgCode": {
+                                "type": "number",
+                                "description": "The EPSG code"
+                            },
+                            "definition": {
+                                "type": "string",
+                                "description": "The proj4js definition for this EPSG code. Consult https://epsg.io/ for the correct proj4js definition"
+                            }
+                        }
+                    },
+                    "default": [],
+                    "description": "A list of additional map projections to register with this extension. Such projections can be used with the `Map Preview (with projection)` command"
                 }
             }
         },

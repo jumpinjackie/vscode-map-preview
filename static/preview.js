@@ -46,7 +46,15 @@ function tryReadFeatures(format, text, options) {
     }
 }
 
-function createPreviewSource(previewContent, formatOptions, callback) {
+function createPreviewSource(previewContent, formatOptions, previewSettings, callback) {
+    let projections = previewSettings.projections || [];
+    if (projections.length > 0) {
+        for (let i = 0; i < projections.length; i++) {
+            let pj = projections[i];
+            proj4.defs("EPSG:" + pj.epsgCode, pj.definition);
+        }
+        ol.proj.proj4.register(proj4);
+    }
     var formats = {
         "GPX": ol.format.GPX,
         "GeoJSON": ol.format.GeoJSON,
@@ -119,66 +127,75 @@ function makeSelectInteraction(previewSettings) {
 }
 
 function initPreviewMap(domElId, preview, previewSettings) {
-    var vertexStyle = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: previewSettings.style.vertex.radius,
-            fill: new ol.style.Fill({
-                color: previewSettings.style.vertex.fill.color
-            })
-        }),
-        geometry: function(feature) {
-            var g = feature.getGeometry();
-            var gt = g.getType();
-            switch (gt) 
-            {
-                case "MultiPolygon":
+    let vertexStyle = null;
+    if (previewSettings.style.vertex.enabled === true) {
+        vertexStyle = new ol.style.Style({
+            image: new ol.style.Circle({
+                radius: previewSettings.style.vertex.radius,
+                fill: new ol.style.Fill({
+                    color: previewSettings.style.vertex.fill.color
+                })
+            }),
+            geometry: function(feature) {
+                var g = feature.getGeometry();
+                var gt = g.getType();
+                switch (gt) 
                 {
-                    var coords = g.getCoordinates();
-                    var geoms = [];
-                    for (var i = 0; i < coords.length; i++) {
-                        var polyCoords = coords[i];
-                        for (var j = 0; j < polyCoords.length; j++) {
-                            var pts = polyCoords[j];
+                    case "MultiPolygon":
+                    {
+                        var coords = g.getCoordinates();
+                        var geoms = [];
+                        for (var i = 0; i < coords.length; i++) {
+                            var polyCoords = coords[i];
+                            for (var j = 0; j < polyCoords.length; j++) {
+                                var pts = polyCoords[j];
+                                geoms.push(new ol.geom.MultiPoint(pts));
+                            }
+                        }
+                        return new ol.geom.GeometryCollection(geoms);
+                    }
+                    case "MultiLineString":
+                    case "Polygon":
+                    {
+                        var coords = g.getCoordinates();
+                        var geoms = [];
+                        for (var i = 0; i < coords.length; i++) {
+                            var pts = coords[i];
                             geoms.push(new ol.geom.MultiPoint(pts));
                         }
+                        return new ol.geom.GeometryCollection(geoms);
                     }
-                    return new ol.geom.GeometryCollection(geoms);
-                }
-                case "MultiLineString":
-                case "Polygon":
-                {
-                    var coords = g.getCoordinates();
-                    var geoms = [];
-                    for (var i = 0; i < coords.length; i++) {
-                        var pts = coords[i];
-                        geoms.push(new ol.geom.MultiPoint(pts));
+                    case "LineString":
+                    {
+                        var coords = g.getCoordinates();
+                        var geoms = [];
+                        for (var i = 0; i < coords.length; i++) {
+                            var pts = coords[i];
+                            geoms.push(new ol.geom.Point(pts));
+                        }
+                        return new ol.geom.GeometryCollection(geoms);
                     }
-                    return new ol.geom.GeometryCollection(geoms);
                 }
-                case "LineString":
-                {
-                    var coords = g.getCoordinates();
-                    var geoms = [];
-                    for (var i = 0; i < coords.length; i++) {
-                        var pts = coords[i];
-                        geoms.push(new ol.geom.Point(pts));
-                    }
-                    return new ol.geom.GeometryCollection(geoms);
-                }
+                return g;
             }
-            return g;
-        }
-    });
+        });
+    }
     var polygonStyle = [new ol.style.Style({
         stroke: new ol.style.Stroke(previewSettings.style.polygon.stroke),
         fill: new ol.style.Fill(previewSettings.style.polygon.fill)
-    }), vertexStyle];
+    })];
+    if (vertexStyle) {
+        polygonStyle.push(vertexStyle);
+    }
     var lineStyle = [new ol.style.Style({
         fill: new ol.style.Stroke({
             color: previewSettings.style.line.stroke.color
         }),
         stroke: new ol.style.Stroke(previewSettings.style.line.stroke)
-    }), vertexStyle];
+    })];
+    if (vertexStyle) {
+        lineStyle.push(vertexStyle);
+    }
     var pointStyle = new ol.style.Style({
         image: new ol.style.Circle({
             radius: previewSettings.style.point.radius || 5,

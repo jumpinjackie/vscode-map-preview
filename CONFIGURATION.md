@@ -207,3 +207,19 @@ Default Value: `"rgba(49, 159, 211, 1)"`
 Description: The default vertex color. Used to style vertices in lines and polygon layers. NOTE: Doesn't affect KML if its features have been configured with inline styles
 
 > For 0.5.0 onwards: If `map.preview.style.vertex.enabled` is `false`, this setting has no effect
+
+## map.preview.projections (new in 0.5.0)
+
+Type: `array (of { "epsgCode": number, "definition": string })`
+
+Default Value: `[]`
+
+Description: A list of additional map projections to register with this extension. Such projections can be used with the `Map Preview (with projection)` command
+
+For example, to register the [EPSG:28355 projection](https://epsg.io/28355), you would set this property as follows:
+
+```
+"map.preview.projections": [
+    { "epsgCode": 28355, "definition": "+proj=utm +zone=55 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" }
+]
+```

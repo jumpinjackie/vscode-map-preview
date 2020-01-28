@@ -150,6 +150,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             this.createLocalSource("ol.css", SourceType.STYLE) +
             this.createLocalSource("ol-layerswitcher.css", SourceType.STYLE) +
             this.createLocalSource("ol-popup.css", SourceType.STYLE) +
+            this.createLocalSource("proj4.js", SourceType.SCRIPT) +
             this.createLocalSource("ol.js", SourceType.SCRIPT) +
             this.createLocalSource("ol-layerswitcher.js", SourceType.SCRIPT) +
             this.createLocalSource("ol-popup.js", SourceType.SCRIPT) +
@@ -174,7 +175,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                     if (previewProj != null) {
                         formatOptions.dataProjection = previewProj; 
                     }
-                    createPreviewSource(content, formatOptions, function (preview) {
+                    createPreviewSource(content, formatOptions, previewConfig, function (preview) {
                         document.getElementById("format").innerHTML = "Format: " + preview.driver;
                         initPreviewMap('map', preview, previewConfig);
                     });
