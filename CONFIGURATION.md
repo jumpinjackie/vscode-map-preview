@@ -223,3 +223,22 @@ For example, to register the [EPSG:28355 projection](https://epsg.io/28355), you
     { "epsgCode": 28355, "definition": "+proj=utm +zone=55 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs" }
 ]
 ```
+
+## map.preview.csvColumnAliases
+
+Type: `array (of { "xColumn": string, "yColumn": string })`
+
+Default Value: 
+
+```
+[
+    { "xColumn": "x", "yColumn": "y" },
+    { "xColumn": "lon", "yColumn": "lat" },
+    { "xColumn": "long", "yColumn": "lat" },
+    { "xColumn": "lng", "yColumn": "lat" },
+    { "xColumn": "longitude", "yColumn": "latitude" },
+    { "xColumn": "easting", "yColumn": "northing" }
+]
+```
+
+Description: A list of case-insensitive column name pairs to look for X/Y coordinates when attempting to preview a given CSV file. If no column pair match is found, the document content is not considered as a CSV and the extension will move on to the other supported format drivers one-by-one

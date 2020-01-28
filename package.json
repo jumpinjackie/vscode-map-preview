@@ -198,6 +198,32 @@
                     },
                     "default": [],
                     "description": "A list of additional map projections to register with this extension. Such projections can be used with the `Map Preview (with projection)` command"
+                },
+                "map.preview.csvColumnAliases": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "title": "",
+                        "properties": {
+                            "xColumn": {
+                                "type": "string",
+                                "description": "The name of the column containing the X point coordinate"
+                            },
+                            "yColumn": {
+                                "type": "string",
+                                "description": "The name of the column containing the Y point coordinate"
+                            }
+                        }
+                    },
+                    "default": [
+                        { "xColumn": "x", "yColumn": "y" },
+                        { "xColumn": "lon", "yColumn": "lat" },
+                        { "xColumn": "long", "yColumn": "lat" },
+                        { "xColumn": "lng", "yColumn": "lat" },
+                        { "xColumn": "longitude", "yColumn": "latitude" },
+                        { "xColumn": "easting", "yColumn": "northing" }
+                    ],
+                    "description": "A list of case-insensitive column name pairs to look for X/Y coordinates when attempting to preview a given CSV file"
                 }
             }
         },
