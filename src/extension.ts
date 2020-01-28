@@ -203,6 +203,10 @@ function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode
     panel.webview.html = content.provideTextDocumentContent(previewUri);
 }
 
+interface ProjectionItem extends vscode.QuickPickItem {
+    projection: string;
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
@@ -219,22 +223,28 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
-        const opts: vscode.InputBoxOptions = {
-            prompt: "Enter the EPSG code for your projection",
-            placeHolder: "EPSG:XXXX",
-            validateInput: (val) => {
-                if (!val.match(EPSG_REGEX)) {
-                    return "The projection is not of the form 'EPSG:XXXX', where XXXX is a number";
-                }
-                return null;
-            }
+        const opts: vscode.QuickPickOptions = {
+            canPickMany: false,
+            //prompt: "Enter the EPSG code for your projection",
+            placeHolder: "EPSG:XXXX"
         };
-        vscode.window.showInputBox(opts).then(val => {
+        const config = vscode.workspace.getConfiguration("map.preview");
+        const codes = [
+            "EPSG:4326",
+            "EPSG:3857",
+            ...config.projections
+                     .filter(prj => prj.epsgCode != 4326 && prj.epsgCode != 3857)
+                     .map(prj => `EPSG:${prj.epsgCode}`)
+        ].map((epsg: string) => ({
+            label: `Preview in projection (${epsg})`,
+            projection: epsg
+        } as ProjectionItem));
+        vscode.window.showQuickPick(codes, opts).then(val => {
             if (val) {
                 const doc = vscode.window.activeTextEditor.document;
                 const docName = path.basename(doc.fileName);
                 const previewUri = makePreviewUri(doc);
-                provider.setPreviewProjection(previewUri, val);
+                provider.setPreviewProjection(previewUri, val.projection);
                 provider.triggerVirtualDocumentChange(previewUri);
                 loadWebView(provider, previewUri, docName, extensionPath);
             }
