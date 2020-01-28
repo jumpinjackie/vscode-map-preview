@@ -2,7 +2,7 @@
     "name": "vscode-map-preview",
     "displayName": "VSCode Map Preview",
     "description": "VSCode extension for visually previewing geospatial file content (GeoJSON, KML, etc) on a map",
-    "version": "0.4.8",
+    "version": "0.5.0",
     "private": true,
     "publisher": "jumpinjackie",
     "engines": {
@@ -205,13 +205,13 @@
         "postinstall": "node ./node_modules/vscode/bin/install"
     },
     "dependencies": {
-        "file-url": "^2.0.2",
+        "file-url": "^3.0.0",
         "node-uuid": "^1.4.8"
     },
     "devDependencies": {
-        "@types/mocha": "^5.2.6",
-        "@types/node": "^10.5.2",
-        "typescript": "^3.3.3333",
-        "vscode": "^1.1.29"
+        "@types/mocha": "^5.2.7",
+        "@types/node": "^13.5.0",
+        "typescript": "^3.7.5",
+        "vscode": "^1.1.36"
     }
 }
