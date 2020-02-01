@@ -37,12 +37,12 @@
                 {
                     "command": "map.preview",
                     "group": "navigation",
-                    "when": "resourceScheme == file"
+                    "when": "resourceExtname == .geojson || resourceExtname == .kml || resourceExtname == .csv || resourceExtname == .gpx || resourceExtname == .igc || resourceExtname == .gml"
                 },
                 {
                     "command": "map.preview-with-proj",
                     "group": "navigation",
-                    "when": "resourceScheme == file"
+                    "when": "resourceExtname == .geojson || resourceExtname == .kml || resourceExtname == .csv || resourceExtname == .gpx || resourceExtname == .igc || resourceExtname == .gml"
                 }
             ]
         },

@@ -1,3 +1,14 @@
+# 0.5.1
+
+ * [#45] (https://github.com/jumpinjackie/vscode-map-preview/issues/45) Restrict showing preview UI buttons only on files types that are potentially previewable
+   * `.csv` for CSV files
+   * `.json` for GeoJSON files
+   * `.kml` for KML files
+   * `.gml` for GML files
+   * `.gpx` for GPX files
+   * `.igc` for IGC files
+   * For any other previewable content, you can still run the underlying command.
+
 # 0.5.0
 
  * [#42](https://github.com/jumpinjackie/vscode-map-preview/issues/42): Update OpenLayers to 6.1.1
