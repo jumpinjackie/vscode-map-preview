@@ -1,3 +1,7 @@
+# 0.5.2
+
+ * [#48] (https://github.com/jumpinjackie/vscode-map-preview/issues/48) Future-proof the extension by using the `asWebViewUri` API in place of `vscode-resource:` URIs.
+
 # 0.5.1
 
  * [#45] (https://github.com/jumpinjackie/vscode-map-preview/issues/45) Restrict showing preview UI buttons only on files types that are potentially previewable
