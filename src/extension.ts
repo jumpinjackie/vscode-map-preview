@@ -15,6 +15,13 @@ const WEBVIEW_TYPE = "mapPreview";
 const PREVIEW_COMMAND_ID = "map.preview";
 const PREVIEW_PROJ_COMMAND_ID = "map.preview-with-proj";
 
+interface IWebViewContext {
+    asWebviewUri(src: vscode.Uri): vscode.Uri;
+    getCspSource(): string;
+    getScriptNonce(): string;
+    getStylesheetNonce(): string;
+}
+
 function makePreviewUri(doc: vscode.TextDocument): vscode.Uri {
     return vscode.Uri.parse(`${SCHEME}://map-preview/map-preview: ${doc.fileName}`);
 }
@@ -93,8 +100,26 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     public provideTextDocumentContent(uri: vscode.Uri): string {
         const content = this.generateDocumentContent(uri);
-        const sUri = uri.toString();
-        return content;
+        return `<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <!--
+        Use a content security policy to only allow loading images from https or from our extension directory,
+        and only allow scripts that have a specific nonce.
+        -->
+        <meta 
+            http-equiv="Content-Security-Policy"
+            content="default-src 'none';
+                img-src ${this._wctx.getCspSource()} data: https:;
+                style-src 'unsafe-inline' ${this._wctx.getCspSource()};
+                style-src-elem 'unsafe-inline' ${this._wctx.getCspSource()};
+                script-src 'nonce-${this._wctx.getScriptNonce()}' ${this._wctx.getCspSource()};" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Map Preview</title>
+    </head>
+    ${content}
+</html>`;
     }
 
     private errorSnippet(error: string): string {
@@ -112,17 +137,26 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         return this._onDidChange.event;
     }
 
+    private _wctx: IWebViewContext | undefined;
+
+    public attachWebViewContext(xformer: IWebViewContext) {
+        this._wctx = xformer;
+    }
+
+    public detachWebViewContext() {
+        this._wctx = undefined;
+    }
+
     private createLocalSource(file: string, type: SourceType) {
         const onDiskPath = vscode.Uri.file(
             path.join(this.extensionPath, 'static', file)
         );
-    
-        const source_path = onDiskPath.with({ scheme: "vscode-resource" });
+        const source_path = this._wctx.asWebviewUri(onDiskPath);
         switch (type) {
             case SourceType.SCRIPT:
-                return `<script src="${source_path}" type="text/javascript"></script>`;
+                return `<script nonce="${this._wctx.getScriptNonce()}" src="${source_path}" type="text/javascript"></script>`;
             case SourceType.STYLE:
-                return `<link href="${source_path}" rel="stylesheet" />`;
+                return `<link nonce="${this._wctx.getStylesheetNonce()}" href="${source_path}" rel="stylesheet" />`;
         }
     }
 
@@ -158,7 +192,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             this.createLocalSource("ol-popup.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.css", SourceType.STYLE) +
-            `<script type="text/javascript">
+            `<script nonce="${this._wctx.getScriptNonce()}" type="text/javascript">
 
                 function setError(e) {
                     var mapEl = document.getElementById("map");
@@ -191,16 +225,40 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
 function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, fileName: string, extensionPath: string) {
     //const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
-    const panel = vscode.window.createWebviewPanel(WEBVIEW_TYPE, `Map Preview: ${fileName}`, vscode.ViewColumn.Two, {
-        // Enable javascript in the webview
-        enableScripts: true,
+    const panel = vscode.window.createWebviewPanel(
+        WEBVIEW_TYPE, 
+        `Map Preview: ${fileName}`,
+        vscode.ViewColumn.Two,
+        {
+            // Enable scripts in the webview
+            enableScripts: true,
+            // Restrict the webview to only loading content from our extension's `static` directory.
+            localResourceRoots: [
+                vscode.Uri.file(path.join(extensionPath, 'static'))
+            ]
+        }
+    );
+    const scriptNonce = getNonce();
+    const cssNonce = getNonce();
+    const wctx: IWebViewContext = {
+        asWebviewUri: uri => panel.webview.asWebviewUri(uri),
+        getCspSource: () => panel.webview.cspSource,
+        getScriptNonce: () => scriptNonce,
+        getStylesheetNonce: () => cssNonce
+    };
+    content.attachWebViewContext(wctx);
+    const html =  content.provideTextDocumentContent(previewUri);
+    content.detachWebViewContext();
+    panel.webview.html = html;
+}
 
-        // And restrict the webview to only loading content from our extension's `static` directory.
-        localResourceRoots: [
-            vscode.Uri.file(path.join(extensionPath, 'static'))
-        ]
-    });
-    panel.webview.html = content.provideTextDocumentContent(previewUri);
+function getNonce() {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 32; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
 }
 
 interface ProjectionItem extends vscode.QuickPickItem {
