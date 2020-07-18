@@ -206,16 +206,79 @@ function makeSelectInteraction(previewSettings) {
     });
 }
 
+function vertexImage(color, previewSettings) {
+    return new ol.style.Circle({
+        radius: previewSettings.style.vertex.radius,
+        fill: new ol.style.Fill({
+            color: color
+        })
+    });
+}
+function pointImage(color, previewSettings) {
+    return new ol.style.Circle({
+        radius: previewSettings.style.point.radius || 5,
+        stroke: new ol.style.Stroke({
+            color: color,
+            width: previewSettings.style.point.stroke.width
+        }),
+        fill: new ol.style.Fill(previewSettings.style.point.fill)
+    });
+}
+
+// support SimpleStyle for lines
+function lineWithSimpleStyle(lineStyle, feature, previewSettings) {
+    const properties = feature.getProperties();
+    const color = properties['stroke'];
+    if (color) {
+        lineStyle[0].getStroke().setColor(color);
+        if (lineStyle.length > 1) {
+            lineStyle[1].setImage(vertexImage(color, previewSettings));
+        }
+    }
+    const width = properties['stroke-width'];
+    if (width) {
+        lineStyle[0].getStroke().setWidth(width);
+    }
+    return lineStyle;
+}
+
+// support SimpleStyle for polygons
+function polygonWithSimpleStyle(polygonStyle, feature, previewSettings) {
+    const properties = feature.getProperties();
+    const color = properties['stroke'];
+    if (color) {
+        polygonStyle[0].getStroke().setColor(color);
+        if (polygonStyle.length > 1) {
+            polygonStyle[1].setImage(vertexImage(color, previewSettings));
+        }
+    }
+    const width = properties['stroke-width'];
+    if (width) {
+        polygonStyle[0].getStroke().setWidth(width);
+    }
+    const fillColor = properties['fill'];
+    if (fillColor) {
+        polygonStyle[0].getFill().setColor(fillColor);
+    }
+
+    return polygonStyle;
+}
+
+// support SimpleStyle for points
+function pointWithSimpleStyle(pointStyle, feature, previewSettings) {
+    const properties = feature.getProperties();
+    const color = properties['marker-color'];
+    if (color) {
+        pointStyle.setImage(pointImage(color, previewSettings));
+    }
+    return pointStyle;
+}
+
 function initPreviewMap(domElId, preview, previewSettings) {
     let vertexStyle = null;
     if (previewSettings.style.vertex.enabled === true) {
         vertexStyle = new ol.style.Style({
-            image: new ol.style.Circle({
-                radius: previewSettings.style.vertex.radius,
-                fill: new ol.style.Fill({
-                    color: previewSettings.style.vertex.fill.color
-                })
-            }),
+            image: vertexImage(previewSettings.style.vertex.fill.color, previewSettings),
             geometry: function (feature) {
                 let g = feature.getGeometry();
                 let gt = g.getType();
@@ -276,11 +339,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         lineStyle.push(vertexStyle);
     }
     let pointStyle = new ol.style.Style({
-        image: new ol.style.Circle({
-            radius: previewSettings.style.point.radius || 5,
-            stroke: new ol.style.Stroke(previewSettings.style.point.stroke),
-            fill: new ol.style.Fill(previewSettings.style.point.fill)
-        })
+        image: pointImage(previewSettings.style.point.stroke.color, previewSettings)
     });
     let previewLayer = new ol.layer.Vector({
         source: preview.source,
@@ -291,11 +350,11 @@ function initPreviewMap(domElId, preview, previewSettings) {
             if (geom) {
                 let geomType = geom.getType();
                 if (geomType.indexOf("Polygon") >= 0) {
-                    return polygonStyle;
+                    return polygonWithSimpleStyle(polygonStyle, feature, previewSettings);
                 } else if (geomType.indexOf("Line") >= 0) {
-                    return lineStyle;
+                    return lineWithSimpleStyle(lineStyle, feature, previewSettings);
                 } else if (geomType.indexOf("Point") >= 0) {
-                    return pointStyle;
+                    return pointWithSimpleStyle(pointStyle, feature, previewSettings);
                 } else { //GeometryCollection
                     return [pointStyle, lineStyle, polygonStyle];
                 }
