@@ -1,17 +1,17 @@
 # 0.5.5
 
- * [#50] (https://github.com/jumpinjackie/vscode-map-preview/issues/50) Add vector feature label decluttering support
- * [#29] (https://github.com/jumpinjackie/vscode-map-preview/issues/29) Partial support for Mapbox SimpleStyle (thanks [@vohtaski](https://github.com/vohtaski))
+ * [#50](https://github.com/jumpinjackie/vscode-map-preview/issues/50) Add vector feature label decluttering support
+ * [#29](https://github.com/jumpinjackie/vscode-map-preview/issues/29) Partial support for Mapbox SimpleStyle (thanks [@vohtaski](https://github.com/vohtaski))
  * OpenLayers updated to `6.3.1`
  * `ol-layerswitcher` updated to `3.5.0`
 
 # 0.5.2
 
- * [#48] (https://github.com/jumpinjackie/vscode-map-preview/issues/48) Future-proof the extension by using the `asWebViewUri` API in place of `vscode-resource:` URIs.
+ * [#48](https://github.com/jumpinjackie/vscode-map-preview/issues/48) Future-proof the extension by using the `asWebViewUri` API in place of `vscode-resource:` URIs.
 
 # 0.5.1
 
- * [#45] (https://github.com/jumpinjackie/vscode-map-preview/issues/45) Restrict showing preview UI buttons only on files types that are potentially previewable
+ * [#45](https://github.com/jumpinjackie/vscode-map-preview/issues/45) Restrict showing preview UI buttons only on files types that are potentially previewable
    * `.csv` for CSV files
    * `.json` for GeoJSON files
    * `.kml` for KML files
