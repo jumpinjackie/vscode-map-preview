@@ -1,6 +1,7 @@
 # 0.5.5
 
- * [#29] (https://github.com/jumpinjackie/vscode-map-preview/issues/29) Partial support for Mapbox SimpleStyle (thanks @vohtaski)
+ * [#50] (https://github.com/jumpinjackie/vscode-map-preview/issues/50) Add vector feature label decluttering support
+ * [#29] (https://github.com/jumpinjackie/vscode-map-preview/issues/29) Partial support for Mapbox SimpleStyle (thanks [@vohtaski](https://github.com/vohtaski))
  * OpenLayers updated to `6.3.1`
  * `ol-layerswitcher` updated to `3.5.0`
 
