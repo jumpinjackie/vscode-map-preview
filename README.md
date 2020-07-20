@@ -28,6 +28,19 @@ See attached gif for an example:
 
  ![](https://github.com/jumpinjackie/vscode-map-preview/raw/master/doc/map_preview.gif)
 
+Partially supports [simplestyle-spec](https://github.com/mapbox/simplestyle-spec/tree/master/1.1.0) for visualization:
+
+- for lines: "stroke", "stroke-width"
+
+ ![](./doc/lines.jpg)
+
+- for polygons: "fill", "stroke", "stroke-width"
+
+ ![](./doc/polygons.jpg)
+
+- for points: "marker-color"
+ ![](./doc/markers.jpg)
+
 Any content not recognized by the preview command (ie. Doesn't check out as any of the above formats) will cause the following error to be shown
 
  ![](https://github.com/jumpinjackie/vscode-map-preview/raw/master/doc/preview_error.png)
