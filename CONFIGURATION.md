@@ -242,3 +242,11 @@ Default Value:
 ```
 
 Description: A list of case-insensitive column name pairs to look for X/Y coordinates when attempting to preview a given CSV file. If no column pair match is found, the document content is not considered as a CSV and the extension will move on to the other supported format drivers one-by-one
+
+## map.preview.declutterLabels
+
+Type: `boolean`
+
+Default Value: `false`
+
+Description: If set to `true`, the preview vector layer will have decluttering enabled, which will prevent rendering of features whose labels overlap with others. This is useful for data like point-heavy KML files where the point density is such that labels are illegible at the higher zoom levels, but as you zoom in closer, more points and labels are able to be shown.

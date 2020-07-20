@@ -360,7 +360,8 @@ function initPreviewMap(domElId, preview, previewSettings) {
                 }
             }
             return null;
-        }
+        },
+        declutter: previewSettings.declutterLabels
     });
     let map = new ol.Map({
         target: 'map',

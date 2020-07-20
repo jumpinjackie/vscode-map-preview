@@ -256,6 +256,11 @@
                         }
                     ],
                     "description": "A list of case-insensitive column name pairs to look for X/Y coordinates when attempting to preview a given CSV file"
+                },
+                "map.preview.declutterLabels": {
+                    "type": "boolean",
+                    "description": "Indicates whether to declutter labels of features. Useful when previewing label-heavy data like point KML files",
+                    "default": false
                 }
             }
         },
