@@ -1,3 +1,9 @@
+# 0.5.5
+
+ * [#29] (https://github.com/jumpinjackie/vscode-map-preview/issues/29) Partial support for Mapbox SimpleStyle (thanks @vohtaski)
+ * OpenLayers updated to `6.3.1`
+ * `ol-layerswitcher` updated to `3.5.0`
+
 # 0.5.2
 
  * [#48] (https://github.com/jumpinjackie/vscode-map-preview/issues/48) Future-proof the extension by using the `asWebViewUri` API in place of `vscode-resource:` URIs.
