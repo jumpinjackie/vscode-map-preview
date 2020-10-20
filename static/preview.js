@@ -225,14 +225,22 @@ function pointImage(color, previewSettings) {
     });
 }
 
+function clamp(value, min, max) {
+    return Math.min(Math.max(min, value), max);
+}
+
 // support SimpleStyle for lines
 function lineWithSimpleStyle(lineStyle, feature, previewSettings) {
     const properties = feature.getProperties();
     const color = properties['stroke'];
     if (color) {
-        lineStyle[0].getStroke().setColor(color);
+        const sc = [...ol.color.asArray(color)];
+        if (properties['stroke-opacity']) {
+            sc[3] = clamp(properties['stroke-opacity'], 0.0, 1.0);
+        }
+        lineStyle[0].getStroke().setColor(sc);
         if (lineStyle.length > 1) {
-            lineStyle[1].setImage(vertexImage(color, previewSettings));
+            lineStyle[1].setImage(vertexImage(sc, previewSettings));
         }
     }
     const width = properties['stroke-width'];
@@ -247,9 +255,13 @@ function polygonWithSimpleStyle(polygonStyle, feature, previewSettings) {
     const properties = feature.getProperties();
     const color = properties['stroke'];
     if (color) {
-        polygonStyle[0].getStroke().setColor(color);
+        const sc = [...ol.color.asArray(color)];
+        if (properties['stroke-opacity']) {
+            sc[3] = clamp(properties['stroke-opacity'], 0.0, 1.0);
+        }
+        polygonStyle[0].getStroke().setColor(sc);
         if (polygonStyle.length > 1) {
-            polygonStyle[1].setImage(vertexImage(color, previewSettings));
+            polygonStyle[1].setImage(vertexImage(sc, previewSettings));
         }
     }
     const width = properties['stroke-width'];
@@ -258,7 +270,11 @@ function polygonWithSimpleStyle(polygonStyle, feature, previewSettings) {
     }
     const fillColor = properties['fill'];
     if (fillColor) {
-        polygonStyle[0].getFill().setColor(fillColor);
+        const fc = [...ol.color.asArray(fillColor)];
+        if (properties['fill-opacity']) {
+            fc[3] = clamp(properties['fill-opacity'], 0.0, 1.0);
+        }
+        polygonStyle[0].getFill().setColor(fc);
     }
 
     return polygonStyle;
@@ -269,7 +285,8 @@ function pointWithSimpleStyle(pointStyle, feature, previewSettings) {
     const properties = feature.getProperties();
     const color = properties['marker-color'];
     if (color) {
-        pointStyle.setImage(pointImage(color, previewSettings));
+        const mc = [...ol.color.asArray(color)];
+        pointStyle.setImage(pointImage(mc, previewSettings));
     }
     return pointStyle;
 }
