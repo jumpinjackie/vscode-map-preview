@@ -1,3 +1,9 @@
+# 0.5.6
+
+ * [#51](https://github.com/jumpinjackie/vscode-map-preview/issues/51) Support opacity properties of Mapbox simple style spec
+ * OpenLayers updated to `6.4.3`
+ * `ol-layerswitcher` updated to `3.7.0`
+
 # 0.5.5
 
  * [#50](https://github.com/jumpinjackie/vscode-map-preview/issues/50) Add vector feature label decluttering support
