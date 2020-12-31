@@ -2,7 +2,7 @@
     "name": "vscode-map-preview",
     "displayName": "VSCode Map Preview",
     "description": "VSCode extension for visually previewing geospatial file content (GeoJSON, KML, etc) on a map",
-    "version": "0.5.6",
+    "version": "0.5.7",
     "private": true,
     "publisher": "jumpinjackie",
     "engines": {
@@ -306,6 +306,6 @@
         "@types/mocha": "^5.2.7",
         "@types/node": "^13.5.0",
         "@types/vscode": "^1.38.0",
-        "typescript": "^3.9.3"
+        "typescript": "^4.1.3"
     }
 }
