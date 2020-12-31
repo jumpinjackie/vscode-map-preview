@@ -1,3 +1,9 @@
+# 0.5.7
+
+ * [#52](https://github.com/jumpinjackie/vscode-map-preview/issues/52) Support KML icon styles
+ * OpenLayers updated to `6.5.0`
+ * `ol-layerswitcher` updated to `3.8.3`
+
 # 0.5.6
 
  * [#51](https://github.com/jumpinjackie/vscode-map-preview/issues/51) Support opacity properties of Mapbox simple style spec
