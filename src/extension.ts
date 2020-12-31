@@ -164,7 +164,6 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         const scrubRegexes = [
             { regex: /\\/g, replace: "\\\\" },                      //Existing backslashes
             { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" },   //CDATA blocks in XML
-            { regex: /(<Icon>[\s\S]*?<\/Icon>)/g, replace: "" },    //KML icons are near un-translateable for us
             { regex: /`/g, replace: "\\`" },                        //Backticks
             { regex: /\${/g, replace: "\\${" }                      //Start of ES6 template string placeholder
         ];
