@@ -1,9 +1,9 @@
 # VSCode Map Preview
 
-[![Marketplace](https://vsmarketplacebadges.dev/version/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadges.dev/version/jumpinjackie.vscode-map-preview.svg)
-[![Installs](https://vsmarketplacebadges.dev/installs-short/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadges.dev/installs-short/jumpinjackie.vscode-map-preview.svg)
-[![Downloads](https://vsmarketplacebadges.dev/downloads-short/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadges.dev/downloads-short/jumpinjackie.vscode-map-preview.svg)
-[![Rating](https://vsmarketplacebadges.dev/rating/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadges.dev/rating/jumpinjackie.vscode-map-preview.svg)
+[![Marketplace](https://vsmarketplacebadge.apphb.com/version/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadge.apphb.com/version/jumpinjackie.vscode-map-preview.svg)
+[![Installs](https://vsmarketplacebadge.apphb.com/installs-short/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadge.apphb.com/installs-short/jumpinjackie.vscode-map-preview.svg)
+[![Downloads](https://vsmarketplacebadge.apphb.com/downloads-short/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadge.apphb.com/downloads-short/jumpinjackie.vscode-map-preview.svg)
+[![Rating](https://vsmarketplacebadge.apphb.com/rating/jumpinjackie.vscode-map-preview.svg)](https://vsmarketplacebadge.apphb.com/rating/jumpinjackie.vscode-map-preview.svg)
 
 This extension provides the ability to preview spatial data files and snippets on a map
 
