@@ -1,3 +1,7 @@
+# 0.5.8
+
+ * [#53](https://github.com/jumpinjackie/vscode-map-preview/issues/53) Set `wrapX` to `false` on the OL vector source to fix display of vectors spanning the international date line
+
 # 0.5.7
 
  * [#52](https://github.com/jumpinjackie/vscode-map-preview/issues/52) Support KML icon styles
