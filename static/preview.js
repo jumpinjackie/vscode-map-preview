@@ -163,7 +163,10 @@ function createPreviewSource(previewContent, formatOptions, previewSettings, cal
         }
         callback({
             source: new ol.source.Vector({
-                features: features
+                features: features,
+                //This is needed for features that cross the intl date line to display properly since we aren't fixing our viewport to one
+                //particular view of the world and OL wraps to one earth's flattened viewport.
+                wrapX: false
             }),
             driver: driverName
         });
