@@ -1,3 +1,7 @@
+# 0.5.9
+
+ * [#56](https://github.com/jumpinjackie/vscode-map-preview/issues/56) Ellipsize property names and values in feature attributes popup if the content is too long. Also `DOMPurify` the names and values to guard against potential XSS
+ * OpenLayers updated to `6.13.0`
 # 0.5.8
 
  * [#53](https://github.com/jumpinjackie/vscode-map-preview/issues/53) Set `wrapX` to `false` on the OL vector source to fix display of vectors spanning the international date line
