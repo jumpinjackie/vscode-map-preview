@@ -27,9 +27,11 @@ function renderFeaturesHtml(selFeatures) {
             if (key == feat.getGeometryName()) {
                 continue;
             }
+            const sk = DOMPurify.sanitize(key);
+            const sv = DOMPurify.sanitize(props[key]);
             html += "<tr>";
-            html += "<td class='popup-attribute-key'>" + key + "</td>";
-            html += "<td class='popup-attribute-value'>" + props[key] + "</td>";
+            html += "<td class='popup-attribute-key' title='" + sk + "' style='max-width: 20ch;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>" + sk + "</td>";
+            html += "<td class='popup-attribute-value' title='" + sv + "' style='max-width: 30ch;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;'>" + sv + "</td>";
             html += "</tr>";
         }
     }

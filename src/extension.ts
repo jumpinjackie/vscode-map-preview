@@ -181,6 +181,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
             </div>` +
+            this.createLocalSource("purify.min.js", SourceType.SCRIPT) +
             this.createLocalSource("ol.css", SourceType.STYLE) +
             this.createLocalSource("ol-layerswitcher.css", SourceType.STYLE) +
             this.createLocalSource("ol-popup.css", SourceType.STYLE) +
@@ -196,8 +197,8 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 function setError(e) {
                     var mapEl = document.getElementById("map");
                     var errHtml = "<h1>An error occurred rendering preview</h1>";
-                    //errHtml += "<p>" + e.name + ": " + e.message + "</p>";
-                    errHtml += "<pre>" + e.stack + "</pre>";
+                    //errHtml += "<p>" + DOMPurify.sanitize(e.name) + ": " + DOMPurify.sanitize(e.message) + "</p>";
+                    errHtml += "<pre>" + DOMPurify.sanitize(e.stack) + "</pre>";
                     mapEl.innerHTML = errHtml;
                 }
 
