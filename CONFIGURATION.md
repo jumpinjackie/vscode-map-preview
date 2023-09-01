@@ -16,11 +16,13 @@ Valid Values:
  * `"stamen-water"` ([Stamen Watercolor](https://docs.stadiamaps.com/map-styles/stamen-watercolor/))
  * `"osm"` ([OpenStreetMap](http://www.openstreetmap.org/))
 
-Default Value: `"osm"`
+Default Value: `"osm"` (as of `0.6.0`, was formerly `"stamen-toner"`)
 
 Description: The default base layer to use for map previews
 
 ## map.preview.apikeys.stadiamaps
+
+> This setting was introduced in `0.6.0`
 
 Type: `string`
 
