@@ -179,6 +179,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         const text = this.cleanText(doc.getText());
 
         const config = vscode.workspace.getConfiguration("map.preview");
+        /*
         //We cannot proceed if default base layer is one that requires API keys and no API key has been provided
         const baseLayer = config.get<string>("defaultBaseLayer");
         switch (baseLayer) {
@@ -198,7 +199,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                     }
                 }
         }
-
+        */
         
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
