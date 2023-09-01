@@ -1,3 +1,16 @@
+# 0.6.0
+
+ * [#59](https://github.com/jumpinjackie/vscode-map-preview/issues/59): Package updates:
+   * OpenLayers `8.0.0`
+   * proj4js `2.9.0`
+   * ol-popup `5.1.0`
+   * ol-layerswitcher (git: `46cfb40`)
+ * [#60](https://github.com/jumpinjackie/vscode-map-preview/issues/60): Added support for Stadia Maps
+   * Stamen layers are now accessed through Stadia Maps
+   * Stadia Maps API key required to access certain layer types. Currently Stamen layers do not require API key access. This may change in the future.
+ * [#46](https://github.com/jumpinjackie/vscode-map-preview/issues/46): Added support for Bing Maps
+   * Bing Maps API key required to access any bing layers
+
 # 0.5.9
 
  * [#56](https://github.com/jumpinjackie/vscode-map-preview/issues/56) Ellipsize property names and values in feature attributes popup if the content is too long. Also `DOMPurify` the names and values to guard against potential XSS
