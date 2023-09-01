@@ -58,8 +58,13 @@
                         "stamen-water",
                         "osm"
                     ],
-                    "default": "stamen-toner",
+                    "default": "osm",
                     "description": "The default base layer to use for map previews"
+                },
+                "map.preview.apikeys.stadiamaps": {
+                    "type": "string",
+                    "default": null,
+                    "description": "API key for Stadia Maps. This is required if any stamen or stadia layer is your default base layer"
                 },
                 "map.preview.debug.dumpContentPath": {
                     "type": "string",

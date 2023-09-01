@@ -387,7 +387,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
     });
     let map = new ol.Map({
         target: 'map',
-        controls: ol.control.defaults({
+        controls: ol.control.defaults.defaults({
             attributionOptions: {
                 collapsible: true
             }
@@ -410,24 +410,24 @@ function initPreviewMap(domElId, preview, previewSettings) {
                         title: 'Stamen Toner',
                         type: 'base',
                         visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
-                        source: new ol.source.Stamen({
-                            layer: 'toner'
+                        source: new ol.source.StadiaMaps ({
+                            layer: 'stamen_toner'
                         })
                     }),
                     new ol.layer.Tile({
                         title: 'Stamen Watercolor',
                         type: 'base',
                         visible: (previewSettings.defaultBaseLayer == "stamen-water"),
-                        source: new ol.source.Stamen({
-                            layer: 'watercolor'
+                        source: new ol.source.StadiaMaps ({
+                            layer: 'stamen_watercolor'
                         })
                     }),
                     new ol.layer.Tile({
                         title: 'Stamen Terrain',
                         type: 'base',
                         visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
-                        source: new ol.source.Stamen({
-                            layer: 'terrain'
+                        source: new ol.source.StadiaMaps ({
+                            layer: 'stamen_terrain'
                         })
                     }),
                     new ol.layer.Tile({
