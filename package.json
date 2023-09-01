@@ -56,6 +56,10 @@
                         "stamen-toner",
                         "stamen-terrain",
                         "stamen-water",
+                        "stadia-alidade-smooth",
+                        "stadia-alidade-smooth-dark",
+                        "stadia-outdoors",
+                        "stadia-osm-bright",
                         "osm"
                     ],
                     "default": "osm",
