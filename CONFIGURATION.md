@@ -11,14 +11,22 @@ This document describes the various configuration settings available
 Type: `string`
 
 Valid Values:
- * `"stamen-toner"` ([Stamen Toner](http://maps.stamen.com/toner))
- * `"stamen-terrain"` ([Stamen Terrain](http://maps.stamen.com/terrain))
- * `"stamen-water"` ([Stamen Watercolor](http://maps.stamen.com/watercolor))
+ * `"stamen-toner"` ([Stamen Toner](https://docs.stadiamaps.com/map-styles/stamen-toner/))
+ * `"stamen-terrain"` ([Stamen Terrain](https://docs.stadiamaps.com/map-styles/stamen-terrain/))
+ * `"stamen-water"` ([Stamen Watercolor](https://docs.stadiamaps.com/map-styles/stamen-watercolor/))
  * `"osm"` ([OpenStreetMap](http://www.openstreetmap.org/))
 
-Default Value: `"stamen-toner"`
+Default Value: `"osm"`
 
 Description: The default base layer to use for map previews
+
+## map.preview.apikeys.stadiamaps
+
+Type: `string`
+
+Default Value: `null`
+
+Description: The Stadia Maps API key. This is recommended if a stamen layer is the default base layer.
 
 ## map.preview.debug.dumpContentPath
 
