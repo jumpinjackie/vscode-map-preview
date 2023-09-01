@@ -60,6 +60,10 @@
                         "stadia-alidade-smooth-dark",
                         "stadia-outdoors",
                         "stadia-osm-bright",
+                        "bing-aerial",
+                        "bing-aerial-with-label",
+                        "bing-road",
+                        "bing-canvas-dark",
                         "osm"
                     ],
                     "default": "osm",
@@ -68,7 +72,12 @@
                 "map.preview.apikeys.stadiamaps": {
                     "type": "string",
                     "default": null,
-                    "description": "API key for Stadia Maps. This is required if any stamen or stadia layer is your default base layer"
+                    "description": "API key for Stadia Maps. This is required if a stamen or stadia layer is your default base layer"
+                },
+                "map.preview.apikeys.bing": {
+                    "type": "string",
+                    "default": null,
+                    "description": "API key for Bing Maps. This is required if bing layer is your default base layer"
                 },
                 "map.preview.debug.dumpContentPath": {
                     "type": "string",

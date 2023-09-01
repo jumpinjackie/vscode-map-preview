@@ -113,6 +113,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             content="default-src 'none';
                 img-src ${this._wctx.getCspSource()} data: https:;
                 worker-src ${this._wctx.getCspSource()} blob:;
+                connect-src ${this._wctx.getCspSource()} https://dev.virtualearth.net;
                 style-src 'unsafe-inline' ${this._wctx.getCspSource()};
                 style-src-elem 'unsafe-inline' ${this._wctx.getCspSource()};
                 script-src 'nonce-${this._wctx.getScriptNonce()}' ${this._wctx.getCspSource()};" />

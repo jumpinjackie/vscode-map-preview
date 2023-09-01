@@ -325,42 +325,82 @@ function setupBaseLayers(previewSettings) {
             apiKey: previewSettings.apikeys.stadiamaps
         })
     }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stadia Maps Alidade Smooth',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'alidade_smooth',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stadia Maps Alidade Smooth Dark',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth-dark"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'alidade_smooth_dark',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stadia Maps Outdoors',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stadia-outdoors"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'stadia_outdoors',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stadia Maps OSM Bright',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stadia-osm-bright"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'osm_bright',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
+    if (previewSettings.apikeys.stadiamaps) {
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stadia Maps Alidade Smooth',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'alidade_smooth',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stadia Maps Alidade Smooth Dark',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth-dark"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'alidade_smooth_dark',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stadia Maps Outdoors',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stadia-outdoors"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'stadia_outdoors',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stadia Maps OSM Bright',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stadia-osm-bright"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'osm_bright',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+    }
+    if (previewSettings.apikeys.bing) {
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Bing Maps - Road',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "bing-road"),
+            source: new ol.source.BingMaps ({
+                imagerySet: 'RoadOnDemand',
+                key: previewSettings.apikeys.bing
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Bing Maps - Aerials',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "bing-aerial"),
+            source: new ol.source.BingMaps ({
+                imagerySet: 'Aerial',
+                key: previewSettings.apikeys.bing
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Bing Maps - Aerials with Labels',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "bing-aerial-with-labels"),
+            source: new ol.source.BingMaps ({
+                imagerySet: 'AerialWithLabelsOnDemand',
+                key: previewSettings.apikeys.bing
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Bing Maps - Dark',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "bing-canvas-dark"),
+            source: new ol.source.BingMaps ({
+                imagerySet: 'CanvasDark',
+                key: previewSettings.apikeys.bing
+            })
+        }));
+    }
     baseLayers.push(new ol.layer.Tile({
         title: 'OpenStreetMap',
         type: 'base',
