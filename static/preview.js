@@ -296,6 +296,80 @@ function pointWithSimpleStyle(pointStyle, feature, previewSettings) {
     return pointStyle;
 }
 
+function setupBaseLayers(previewSettings) {
+    const baseLayers = [];
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stamen Toner',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'stamen_toner',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stamen Watercolor',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stamen-water"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'stamen_watercolor',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stamen Terrain',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'stamen_terrain',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stadia Maps Alidade Smooth',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'alidade_smooth',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stadia Maps Alidade Smooth Dark',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stadia-alidade-smooth-dark"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'alidade_smooth_dark',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stadia Maps Outdoors',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stadia-outdoors"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'stadia_outdoors',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'Stadia Maps OSM Bright',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "stadia-osm-bright"),
+        source: new ol.source.StadiaMaps ({
+            layer: 'osm_bright',
+            apiKey: previewSettings.apikeys.stadiamaps
+        })
+    }));
+    baseLayers.push(new ol.layer.Tile({
+        title: 'OpenStreetMap',
+        type: 'base',
+        visible: (previewSettings.defaultBaseLayer == "osm"),
+        source: new ol.source.OSM()
+    }));
+    return baseLayers;
+}
+
 function initPreviewMap(domElId, preview, previewSettings) {
     let vertexStyle = null;
     if (previewSettings.style.vertex.enabled === true) {
@@ -385,6 +459,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         },
         declutter: previewSettings.declutterLabels
     });
+    let baseLayers = setupBaseLayers(previewSettings);
     let map = new ol.Map({
         target: 'map',
         controls: ol.control.defaults.defaults({
@@ -405,38 +480,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         layers: [
             new ol.layer.Group({
                 title: "Base Maps",
-                layers: [
-                    new ol.layer.Tile({
-                        title: 'Stamen Toner',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
-                        source: new ol.source.StadiaMaps ({
-                            layer: 'stamen_toner'
-                        })
-                    }),
-                    new ol.layer.Tile({
-                        title: 'Stamen Watercolor',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "stamen-water"),
-                        source: new ol.source.StadiaMaps ({
-                            layer: 'stamen_watercolor'
-                        })
-                    }),
-                    new ol.layer.Tile({
-                        title: 'Stamen Terrain',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
-                        source: new ol.source.StadiaMaps ({
-                            layer: 'stamen_terrain'
-                        })
-                    }),
-                    new ol.layer.Tile({
-                        title: 'OpenStreetMap',
-                        type: 'base',
-                        visible: (previewSettings.defaultBaseLayer == "osm"),
-                        source: new ol.source.OSM()
-                    })
-                ]
+                layers: baseLayers
             }),
             new ol.layer.Group({
                 title: "Map Preview",
