@@ -95,6 +95,8 @@ Additional optional parameters that can be specified for a given layer can be fo
  * [WMTS](https://openlayers.org/en/latest/apidoc/module-ol_source_WMTS.html)
  * Please note: Due to current vscode configuration schema limitations, only `string` parameters documented above can be set at the moment. It is not possible to define parameters that are not `string` based.
 
+> NOTE: Due to vscode configuration schema limitations, it is not possible to make a custom base layer visible by default (through the `map.preview.defaultBaseLayer` configuration setting). A map preview will always start with such layers initially not visible.
+
 ### Configuration example
 
 ```
