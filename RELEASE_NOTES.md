@@ -1,7 +1,7 @@
 # 0.6.0
 
  * [#59](https://github.com/jumpinjackie/vscode-map-preview/issues/59): Package updates:
-   * OpenLayers `8.0.0`
+   * OpenLayers `8.1.0`
    * proj4js `2.9.0`
    * ol-popup `5.1.0`
    * ol-layerswitcher (git: `46cfb40`)
