@@ -296,8 +296,48 @@ function pointWithSimpleStyle(pointStyle, feature, previewSettings) {
     return pointStyle;
 }
 
-function setupBaseLayers(previewSettings) {
+async function setupLayers(previewSettings) {
     const baseLayers = [];
+    if (previewSettings.customLayers && Array.isArray(previewSettings.customLayers.base)) {
+        for (const bldef of previewSettings.customLayers.base) {
+            const sourceParms = Object.fromEntries(bldef.sourceParams
+                .filter(sp => sp.name.indexOf(bldef.kind) < 0)
+                .map(kvp => ([kvp.name, kvp.value]))
+            );
+            switch (bldef.kind) {
+                case "xyz":
+                    baseLayers.push(new ol.layer.Tile({
+                        title: bldef.name,
+                        type: 'base',
+                        visible: false,
+                        source: new ol.source.XYZ(sourceParms)
+                    }));
+                    break;
+                case "wmts":
+                    const capsUrl = bldef.sourceParams.find(sp => sp.name === 'wmts:capabilitiesUrl')?.value;
+                    if (!capsUrl) {
+                        console.warn(`Missing required wmts:capabilitiesUrl source parameter`);
+                    } else {
+                        const capsR = await fetch(capsUrl);
+                        const capsRText = await capsR.text();
+                        const parser = new ol.format.WMTSCapabilities();
+                        const capsParsed = parser.read(capsRText);
+                        const wmtsOptions = ol.source.WMTS.optionsFromCapabilities(capsParsed, sourceParms);
+                        baseLayers.push(new ol.layer.Tile({
+                            title: bldef.name,
+                            type: 'base',
+                            visible: false,
+                            source: new ol.source.WMTS(wmtsOptions)
+                        }));
+                    }
+                    break;
+                default:
+                    console.warn(`Unsupported base layer kind: ${bldef.kind}`);
+                    break;
+            }
+        }
+    }
+
     baseLayers.push(new ol.layer.Tile({
         title: 'Stamen Toner',
         type: 'base',
@@ -499,54 +539,55 @@ function initPreviewMap(domElId, preview, previewSettings) {
         },
         declutter: previewSettings.declutterLabels
     });
-    let baseLayers = setupBaseLayers(previewSettings);
-    let map = new ol.Map({
-        target: 'map',
-        controls: ol.control.defaults.defaults({
-            attributionOptions: {
-                collapsible: true
-            }
-        }).extend([
-            new ol.control.ScaleLine(),
-            new ol.control.MousePosition({
-                projection: (previewSettings.coordinateDisplay.projection || 'EPSG:4326'),
-                coordinateFormat: function (coordinate) {
-                    return ol.coordinate.format(coordinate, (previewSettings.coordinateDisplay.format || 'Lat: {y}, Lng: {x}'), 4);
+    setupLayers(previewSettings).then((baseLayers) => {
+        let map = new ol.Map({
+            target: 'map',
+            controls: ol.control.defaults.defaults({
+                attributionOptions: {
+                    collapsible: true
                 }
-            }),
-            new ol.control.ZoomSlider(),
-            new ol.control.ZoomToExtent()
-        ]),
-        layers: [
-            new ol.layer.Group({
-                title: "Base Maps",
-                layers: baseLayers
-            }),
-            new ol.layer.Group({
-                title: "Map Preview",
-                layers: [
-                    previewLayer
-                ]
-            })
-        ]
-    });
-    let mapView = new ol.View();
-    mapView.fit(preview.source.getExtent(), map.getSize());
-    map.setView(mapView);
-    let popup = new Popup();
-    map.addOverlay(popup);
-    let layerSwitcher = new ol.control.LayerSwitcher({
-        tipLabel: 'Legend' // Optional label for button
-    });
-    map.addControl(layerSwitcher);
-
-    let select = makeSelectInteraction(previewSettings);
-    map.addInteraction(select);
-
-    select.on('select', function (evt) {
-        let selFeatures = evt.selected;
-        let html = renderFeaturesHtml(selFeatures);
-        if (html)
-            popup.show(evt.mapBrowserEvent.coordinate, html);
+            }).extend([
+                new ol.control.ScaleLine(),
+                new ol.control.MousePosition({
+                    projection: (previewSettings.coordinateDisplay.projection || 'EPSG:4326'),
+                    coordinateFormat: function (coordinate) {
+                        return ol.coordinate.format(coordinate, (previewSettings.coordinateDisplay.format || 'Lat: {y}, Lng: {x}'), 4);
+                    }
+                }),
+                new ol.control.ZoomSlider(),
+                new ol.control.ZoomToExtent()
+            ]),
+            layers: [
+                new ol.layer.Group({
+                    title: "Base Maps",
+                    layers: baseLayers
+                }),
+                new ol.layer.Group({
+                    title: "Map Preview",
+                    layers: [
+                        previewLayer
+                    ]
+                })
+            ]
+        });
+        let mapView = new ol.View();
+        mapView.fit(preview.source.getExtent(), map.getSize());
+        map.setView(mapView);
+        let popup = new Popup();
+        map.addOverlay(popup);
+        let layerSwitcher = new ol.control.LayerSwitcher({
+            tipLabel: 'Legend' // Optional label for button
+        });
+        map.addControl(layerSwitcher);
+    
+        let select = makeSelectInteraction(previewSettings);
+        map.addInteraction(select);
+    
+        select.on('select', function (evt) {
+            let selFeatures = evt.selected;
+            let html = renderFeaturesHtml(selFeatures);
+            if (html)
+                popup.show(evt.mapBrowserEvent.coordinate, html);
+        });
     });
 }

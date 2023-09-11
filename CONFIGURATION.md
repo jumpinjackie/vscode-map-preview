@@ -60,6 +60,80 @@ Description: The Bing Maps API key. If not set, the following layer types will n
  * `"bing-road"`
  * `"bing-canvas-dark"`
 
+## map.preview.customLayers.base
+
+> This setting was introduced in `0.6.0`
+
+Type: `array`
+
+Default Value: `[]`
+
+Description: An array of custom base layer definitions. The sub item schema is currently:
+
+```
+{
+    "name": "string", // The name of the base layer
+    "kind": "string", // The kind of base layer: Either "xyz" or "wmts"
+    "sourceParams": [ // Parameters specific to the base layer. Described as a series of name/value pairs
+        { "name": "string", "value": "string" },
+        ...
+        { "name": "string", "value": "string" }
+    ]
+}
+```
+
+The current set of minimum required source parameters is listed below
+
+| Layer Kind | Name | Description | Version introduced |
+|---|---|---|---|
+|`xyz`|`url`|URL template. Must include `{x}`, `{y}` or `{-y}`, and `{z}` placeholders|`0.6.0`|
+|`wmts`|`wmts:capabilitiesUrl`|The capabilities document URL for the WMTS service|`0.6.0`|
+|`wmts`|`layer`|The WMTS layer name|`0.6.0`|
+
+Additional optional parameters that can be specified for a given layer can be found here:
+ * [XYZ](https://openlayers.org/en/latest/apidoc/module-ol_source_XYZ-XYZ.html)
+ * [WMTS](https://openlayers.org/en/latest/apidoc/module-ol_source_WMTS.html)
+ * Please note: Due to current vscode configuration schema limitations, only `string` parameters documented above can be set at the moment. It is not possible to define parameters that are not `string` based.
+
+> NOTE: Due to vscode configuration schema limitations, it is not possible to make a custom base layer visible by default (through the `map.preview.defaultBaseLayer` configuration setting). A map preview will always start with such layers initially not visible.
+
+### Configuration example
+
+```
+    "map.preview.customLayers.base": [
+        // XYZ layer example
+        {
+            "name": "ESRI World Topo",
+            "kind": "xyz",
+            "sourceParams": [
+                {
+                    "name": "url",
+                    "value": "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+                },
+                {
+                    "name": "attributions",
+                    "value": "Tiles © <a href='https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer'>ArcGIS</a>"
+                }
+            ]
+        },
+        // WMTS layer example
+        {
+            "name": "GA WMTS",
+            "kind": "wmts",
+            "sourceParams": [
+                {
+                    "name": "wmts:capabilitiesUrl",
+                    "value": "https://services.ga.gov.au/gis/rest/services/NationalBaseMap_NoLabels/MapServer/WMTS/1.0.0/WMTSCapabilities.xml"
+                },
+                {
+                    "name": "layer",
+                    "value": "NationalBaseMap_NoLabels"
+                }
+            ]
+        }
+    ]
+```
+
 ## map.preview.debug.dumpContentPath
 
 Type: `string`
