@@ -63,7 +63,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     private resolveDocument(uri: vscode.Uri): vscode.TextDocument {
         const matches = vscode.window.visibleTextEditors.filter(ed => {
-            return makePreviewUri(ed.document).toString() == uri.toString(); 
+            return makePreviewUri(ed.document).toString() == uri.toString();
         });
         if (matches.length >= 1) { //If we get more than one match, it's probably because the same document has been opened more than once (eg. split view)
             return matches[0].document;
@@ -100,6 +100,28 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
     public provideTextDocumentContent(uri: vscode.Uri): string {
         const content = this.generateDocumentContent(uri);
+        // Need to set up CSP for any URLs we find in the base layer defns
+        const baseLayersRoot = vscode.workspace.getConfiguration("map.preview.customLayers");
+        const cspAllowedUrls = [];
+        if (baseLayersRoot.has("base")) {
+            const baseLayers = baseLayersRoot.get("base");
+            if (Array.isArray(baseLayers)) {
+                for (const bldef of baseLayers) {
+                    switch (bldef.kind) {
+                        // xyz layers already handled by the https: img-src policy
+                        case "wmts":
+                            {
+                                const url = bldef.sourceParams.find(sp => sp.name === 'wmts:capabilitiesUrl')?.value;
+                                if (url) {
+                                    cspAllowedUrls.push(url);
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
+        }
+
         return `<!DOCTYPE html>
 <html lang="en">
     <head>
@@ -113,7 +135,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             content="default-src 'none';
                 img-src ${this._wctx.getCspSource()} data: https:;
                 worker-src ${this._wctx.getCspSource()} blob:;
-                connect-src ${this._wctx.getCspSource()} https://dev.virtualearth.net;
+                connect-src ${this._wctx.getCspSource()} https://dev.virtualearth.net ${cspAllowedUrls.join(" ")};
                 style-src 'unsafe-inline' ${this._wctx.getCspSource()};
                 style-src-elem 'unsafe-inline' ${this._wctx.getCspSource()};
                 script-src 'nonce-${this._wctx.getScriptNonce()}' ${this._wctx.getCspSource()};" />
@@ -201,7 +223,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                 }
         }
         */
-        
+
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
@@ -251,7 +273,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, fileName: string, extensionPath: string) {
     //const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
     const panel = vscode.window.createWebviewPanel(
-        WEBVIEW_TYPE, 
+        WEBVIEW_TYPE,
         `Map Preview: ${fileName}`,
         vscode.ViewColumn.Two,
         {
@@ -272,7 +294,7 @@ function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode
         getStylesheetNonce: () => cssNonce
     };
     content.attachWebViewContext(wctx);
-    const html =  content.provideTextDocumentContent(previewUri);
+    const html = content.provideTextDocumentContent(previewUri);
     content.detachWebViewContext();
     panel.webview.html = html;
 }
@@ -316,8 +338,8 @@ export function activate(context: vscode.ExtensionContext) {
             "EPSG:4326",
             "EPSG:3857",
             ...config.projections
-                     .filter(prj => prj.epsgCode != 4326 && prj.epsgCode != 3857)
-                     .map(prj => `EPSG:${prj.epsgCode}`)
+                .filter(prj => prj.epsgCode != 4326 && prj.epsgCode != 3857)
+                .map(prj => `EPSG:${prj.epsgCode}`)
         ].map((epsg: string) => ({
             label: `Preview in projection (${epsg})`,
             projection: epsg
@@ -339,5 +361,5 @@ export function activate(context: vscode.ExtensionContext) {
 
 // this method is called when your extension is deactivated
 export function deactivate() {
-    
+
 }

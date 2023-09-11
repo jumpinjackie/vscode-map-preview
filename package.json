@@ -69,6 +69,42 @@
                     "default": "osm",
                     "description": "The default base layer to use for map previews"
                 },
+                "map.preview.customLayers.base": {
+                    "type": "array",
+                    "description": "An array of custom base layers",
+                    "items": {
+                        "type": "object",
+                        "title": "Layer",
+                        "properties": {
+                            "name": {
+                                "type": "string",
+                                "description": "The name of this base layer"
+                            },
+                            "kind": {
+                                "type": "string",
+                                "description": "The kind of base layer",
+                                "enum": [
+                                    "xyz",
+                                    "wmts"
+                                ]
+                            },
+                            "sourceParams": {
+                                "type": "array",
+                                "description": "A series of key/value parameters for defining this base layer's source",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "description": "The name of this parameter"
+                                    },
+                                    "value": {
+                                        "type": "string",
+                                        "description": "The value of this parameter"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "map.preview.apikeys.stadiamaps": {
                     "type": "string",
                     "default": null,
