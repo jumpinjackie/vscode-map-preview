@@ -450,6 +450,11 @@ async function setupLayers(previewSettings) {
     return baseLayers;
 }
 
+function loadingDone() {
+    const el = document.getElementById("loading-mask");
+    el.remove();
+}
+
 function initPreviewMap(domElId, preview, previewSettings) {
     let vertexStyle = null;
     if (previewSettings.style.vertex.enabled === true) {
@@ -540,6 +545,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         declutter: previewSettings.declutterLabels
     });
     setupLayers(previewSettings).then((baseLayers) => {
+        loadingDone();
         let map = new ol.Map({
             target: 'map',
             controls: ol.control.defaults.defaults({
@@ -589,5 +595,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
             if (html)
                 popup.show(evt.mapBrowserEvent.coordinate, html);
         });
+    }).catch(e => {
+        loadingDone();
     });
 }
