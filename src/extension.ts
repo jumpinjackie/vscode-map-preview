@@ -2,7 +2,6 @@
 import * as fs from 'fs';
 import * as vscode from 'vscode';
 import * as path from 'path';
-import fileUrl = require('file-url');
 
 enum SourceType {
     SCRIPT,
@@ -184,23 +183,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         }
     }
 
-    private cleanText(text: string): string {
-        const scrubRegexes = [
-            { regex: /\\/g, replace: "\\\\" },                      //Existing backslashes
-            { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" },   //CDATA blocks in XML
-            { regex: /`/g, replace: "\\`" },                        //Backticks
-            { regex: /\${/g, replace: "\\${" }                      //Start of ES6 template string placeholder
-        ];
-        for (const r of scrubRegexes) {
-            text = text.replace(r.regex, r.replace);
-        }
-        return text;
-    }
-
     private createMapPreview(doc: vscode.TextDocument, projection: string = null) {
-        //Should we languageId check here?
-        const text = this.cleanText(doc.getText());
-
         const config = vscode.workspace.getConfiguration("map.preview");
         /*
         //We cannot proceed if default base layer is one that requires API keys and no API key has been provided
@@ -227,6 +210,9 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>
+            </div>
+            <div id="loading-mask" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0">
+                <div>Loading Preview ...</div>
             </div>` +
             this.createLocalSource("purify.min.js", SourceType.SCRIPT) +
             this.createLocalSource("ol.css", SourceType.STYLE) +
@@ -253,15 +239,19 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
                     var previewProj = ${projection ? ('"' + projection + '"') : "null"};
                     var previewConfig = ${JSON.stringify(config)};
                     previewConfig.sourceProjection = previewProj;
-                    var content = \`${text}\`;
-                    var formatOptions = { featureProjection: 'EPSG:3857' };
-                    if (previewProj != null) {
-                        formatOptions.dataProjection = previewProj; 
-                    }
-                    createPreviewSource(content, formatOptions, previewConfig, function (preview) {
-                        document.getElementById("format").innerHTML = "Format: " + preview.driver;
-                        initPreviewMap('map', preview, previewConfig);
-                    });
+                    var docUri = "${this._wctx.asWebviewUri(doc.uri)}";
+                    fetch(docUri).then(r => {
+                        r.text().then(content => {
+                            var formatOptions = { featureProjection: 'EPSG:3857' };
+                            if (previewProj != null) {
+                                formatOptions.dataProjection = previewProj; 
+                            }
+                            createPreviewSource(content, formatOptions, previewConfig, function (preview) {
+                                document.getElementById("format").innerHTML = "Format: " + preview.driver;
+                                initPreviewMap('map', preview, previewConfig);
+                            });
+                        }).catch(e => setError(e));
+                    }).catch(e => setError(e));                    
                 } catch (e) {
                     setError(e);
                 }
@@ -272,16 +262,20 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
 
 function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode.Uri, fileName: string, extensionPath: string) {
     //const column = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.viewColumn : undefined;
+    const docName = path.basename(fileName);
+    const docDir = path.dirname(fileName);
     const panel = vscode.window.createWebviewPanel(
         WEBVIEW_TYPE,
-        `Map Preview: ${fileName}`,
+        `Map Preview: ${docName}`,
         vscode.ViewColumn.Two,
         {
             // Enable scripts in the webview
             enableScripts: true,
             // Restrict the webview to only loading content from our extension's `static` directory.
             localResourceRoots: [
-                vscode.Uri.file(path.join(extensionPath, 'static'))
+                vscode.Uri.file(path.join(extensionPath, 'static')),
+                // IMPORTANT: Otherwise our generated HTML cannot fetch() this document's content
+                vscode.Uri.file(docDir)
             ]
         }
     );
@@ -319,15 +313,34 @@ export function activate(context: vscode.ExtensionContext) {
     const provider = new PreviewDocumentContentProvider(extensionPath);
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
-        const doc = vscode.window.activeTextEditor.document;
-        const docName = path.basename(doc.fileName);
+        const editor = vscode.window.activeTextEditor;
+        // Probable cause: File is too big. VSCode won't even hand us just the URI of the document (which is
+        // what we really are after). Nothing we can do here.
+        //
+        // TODO: Of course if VSCode ever introduces an API that gives us the URI of the active document we may
+        // be able to revisit this
+        if (!editor) { 
+            vscode.window.showErrorMessage("This file is too big to be previewed");
+            return;
+        }
+        const doc = editor.document;
         const previewUri = makePreviewUri(doc);
         provider.clearPreviewProjection(previewUri);
         provider.triggerVirtualDocumentChange(previewUri);
-        loadWebView(provider, previewUri, docName, extensionPath);
+        loadWebView(provider, previewUri, doc.fileName, extensionPath);
     });
 
     const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
+        const editor = vscode.window.activeTextEditor;
+        // Probable cause: File is too big. VSCode won't even hand us just the URI of the document (which is
+        // what we really are after). Nothing we can do here.
+        //
+        // TODO: Of course if VSCode ever introduces an API that gives us the URI of the active document we may
+        // be able to revisit this
+        if (!editor) {
+            vscode.window.showErrorMessage("This file is too big to be previewed");
+            return;
+        }
         const opts: vscode.QuickPickOptions = {
             canPickMany: false,
             //prompt: "Enter the EPSG code for your projection",
@@ -346,12 +359,11 @@ export function activate(context: vscode.ExtensionContext) {
         } as ProjectionItem));
         vscode.window.showQuickPick(codes, opts).then(val => {
             if (val) {
-                const doc = vscode.window.activeTextEditor.document;
-                const docName = path.basename(doc.fileName);
+                const doc = editor.document;
                 const previewUri = makePreviewUri(doc);
                 provider.setPreviewProjection(previewUri, val.projection);
                 provider.triggerVirtualDocumentChange(previewUri);
-                loadWebView(provider, previewUri, docName, extensionPath);
+                loadWebView(provider, previewUri, doc.fileName, extensionPath);
             }
         });
     });

@@ -352,14 +352,11 @@
         "compile": "tsc -p ./",
         "watch": "tsc -w -p ./"
     },
-    "dependencies": {
-        "file-url": "^3.0.0",
-        "node-uuid": "^1.4.8"
-    },
+    "dependencies": {},
     "devDependencies": {
         "@types/mocha": "^5.2.7",
         "@types/node": "^13.5.0",
         "@types/vscode": "^1.38.0",
-        "typescript": "^4.1.3"
+        "typescript": "^5.2.2"
     }
 }

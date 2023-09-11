@@ -4,6 +4,12 @@ html, body {
     height: 100%;
 }
 
+#loading-mask {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 div.ol-popup {
     background: #FFFFFF;
 }

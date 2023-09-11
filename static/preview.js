@@ -389,7 +389,7 @@ async function setupLayers(previewSettings) {
             type: 'base',
             visible: (previewSettings.defaultBaseLayer == "stadia-outdoors"),
             source: new ol.source.StadiaMaps ({
-                layer: 'stadia_outdoors',
+                layer: 'outdoors',
                 apiKey: previewSettings.apikeys.stadiamaps
             })
         }));
@@ -448,6 +448,11 @@ async function setupLayers(previewSettings) {
         source: new ol.source.OSM()
     }));
     return baseLayers;
+}
+
+function loadingDone() {
+    const el = document.getElementById("loading-mask");
+    el.remove();
 }
 
 function initPreviewMap(domElId, preview, previewSettings) {
@@ -540,6 +545,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
         declutter: previewSettings.declutterLabels
     });
     setupLayers(previewSettings).then((baseLayers) => {
+        loadingDone();
         let map = new ol.Map({
             target: 'map',
             controls: ol.control.defaults.defaults({
@@ -589,5 +595,7 @@ function initPreviewMap(domElId, preview, previewSettings) {
             if (html)
                 popup.show(evt.mapBrowserEvent.coordinate, html);
         });
+    }).catch(e => {
+        loadingDone();
     });
 }
