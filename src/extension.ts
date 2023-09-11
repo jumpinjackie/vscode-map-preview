@@ -312,7 +312,17 @@ export function activate(context: vscode.ExtensionContext) {
     const provider = new PreviewDocumentContentProvider(extensionPath);
     const registration = vscode.workspace.registerTextDocumentContentProvider(SCHEME, provider);
     const previewCommand = vscode.commands.registerCommand(PREVIEW_COMMAND_ID, () => {
-        const doc = vscode.window.activeTextEditor.document;
+        const editor = vscode.window.activeTextEditor;
+        // Probable cause: File is too big. VSCode won't even hand us just the URI of the document (which is
+        // what we really are after). Nothing we can do here.
+        //
+        // TODO: Of course if VSCode ever introduces an API that gives us the URI of the active document we may
+        // be able to revisit this
+        if (!editor) { 
+            vscode.window.showErrorMessage("This file is too big to be previewed");
+            return;
+        }
+        const doc = editor.document;
         const previewUri = makePreviewUri(doc);
         provider.clearPreviewProjection(previewUri);
         provider.triggerVirtualDocumentChange(previewUri);
@@ -320,6 +330,16 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     const previewWithProjCommand = vscode.commands.registerCommand(PREVIEW_PROJ_COMMAND_ID, () => {
+        const editor = vscode.window.activeTextEditor;
+        // Probable cause: File is too big. VSCode won't even hand us just the URI of the document (which is
+        // what we really are after). Nothing we can do here.
+        //
+        // TODO: Of course if VSCode ever introduces an API that gives us the URI of the active document we may
+        // be able to revisit this
+        if (!editor) {
+            vscode.window.showErrorMessage("This file is too big to be previewed");
+            return;
+        }
         const opts: vscode.QuickPickOptions = {
             canPickMany: false,
             //prompt: "Enter the EPSG code for your projection",
@@ -338,7 +358,7 @@ export function activate(context: vscode.ExtensionContext) {
         } as ProjectionItem));
         vscode.window.showQuickPick(codes, opts).then(val => {
             if (val) {
-                const doc = vscode.window.activeTextEditor.document;
+                const doc = editor.document;
                 const previewUri = makePreviewUri(doc);
                 provider.setPreviewProjection(previewUri, val.projection);
                 provider.triggerVirtualDocumentChange(previewUri);
