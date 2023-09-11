@@ -31,7 +31,6 @@
         "onCommand:map.preview-with-proj"
     ],
     "main": "./out/src/extension",
-    "browser": "./out/web/extension.js",
     "contributes": {
         "menus": {
             "editor/title": [
