@@ -112,6 +112,8 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             http-equiv="Content-Security-Policy"
             content="default-src 'none';
                 img-src ${this._wctx.getCspSource()} data: https:;
+                worker-src ${this._wctx.getCspSource()} blob:;
+                connect-src ${this._wctx.getCspSource()} https://dev.virtualearth.net;
                 style-src 'unsafe-inline' ${this._wctx.getCspSource()};
                 style-src-elem 'unsafe-inline' ${this._wctx.getCspSource()};
                 script-src 'nonce-${this._wctx.getScriptNonce()}' ${this._wctx.getCspSource()};" />
@@ -176,7 +178,30 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
     private createMapPreview(doc: vscode.TextDocument, projection: string = null) {
         //Should we languageId check here?
         const text = this.cleanText(doc.getText());
+
         const config = vscode.workspace.getConfiguration("map.preview");
+        /*
+        //We cannot proceed if default base layer is one that requires API keys and no API key has been provided
+        const baseLayer = config.get<string>("defaultBaseLayer");
+        switch (baseLayer) {
+            case "stamen-toner":
+            case "stamen-terrain":
+            case "stamen-water":
+                {
+                    let hasApiKey = false;
+                    if (config.has("apikeys.stadiamaps")) {
+                        const key = config.get<string>("apikeys.stadiamaps") ?? "";
+                        hasApiKey = (key.trim().length > 0);
+                    }
+                    if (!hasApiKey) {
+                        return this.errorSnippet(`<h1>API Key Required</h1>
+<p>Your chosen default base layer of <strong>${baseLayer}</strong> requires a Stadia Maps API key and no such key was provided</p>
+<p>Please specify a valid API key for the <strong>map.preview.apikeys.stadiamaps</strong> setting, or change the <strong>map.preview.defaultBaseLayer</strong> setting to a layer type that does not require an API key (like <strong>osm</strong>)</p>`);
+                    }
+                }
+        }
+        */
+        
         return `<body>
             <div id="map" style="width: 100%; height: 100%">
                 <div id="format" style="position: absolute; left: 40; top: 5; z-index: 100; padding: 5px; background: yellow; color: black"></div>

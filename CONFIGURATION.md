@@ -11,14 +11,54 @@ This document describes the various configuration settings available
 Type: `string`
 
 Valid Values:
- * `"stamen-toner"` ([Stamen Toner](http://maps.stamen.com/toner))
- * `"stamen-terrain"` ([Stamen Terrain](http://maps.stamen.com/terrain))
- * `"stamen-water"` ([Stamen Watercolor](http://maps.stamen.com/watercolor))
+ * `"stamen-toner"` ([Stamen Toner](https://docs.stadiamaps.com/map-styles/stamen-toner/))
+ * `"stamen-terrain"` ([Stamen Terrain](https://docs.stadiamaps.com/map-styles/stamen-terrain/))
+ * `"stamen-water"` ([Stamen Watercolor](https://docs.stadiamaps.com/map-styles/stamen-watercolor/))
+ * `"stadia-alidade-smooth"` ([Stadia Maps - Alidade Smooth](https://docs.stadiamaps.com/map-styles/alidade-smooth/))
+ * `"stadia-alidade-smooth-dark"` ([Stadia Maps - Alidade Smooth Dark](https://docs.stadiamaps.com/map-styles/alidade-smooth-dark/))
+ * `"stadia-outdoors"` ([Stadia Maps - Outdoors](https://docs.stadiamaps.com/map-styles/outdoors/))
+ * `"stadia-osm-bright"` ([Stadia Maps - OSM Bright](https://docs.stadiamaps.com/map-styles/osm-bright))
+ * `"bing-aerial"` (Bing Maps - Aerials)
+ * `"bing-aerial-with-label"` (Bing Maps - Aerials with Labels)
+ * `"bing-road"` (Bing Maps - Road)
+ * `"bing-canvas-dark"` (Bing Maps - Dark)
  * `"osm"` ([OpenStreetMap](http://www.openstreetmap.org/))
 
-Default Value: `"stamen-toner"`
+Default Value: `"osm"` (as of `0.6.0`, was formerly `"stamen-toner"`)
 
 Description: The default base layer to use for map previews
+
+## map.preview.apikeys.stadiamaps
+
+> This setting was introduced in `0.6.0`
+
+Type: `string`
+
+Default Value: `null`
+
+Description: The Stadia Maps API key. If not set, the following layer types will not be availabe in the layer switcher:
+
+ * `"stadia-alidade-smooth"`
+ * `"stadia-alidade-smooth-dark"`
+ * `"stadia-outdoors"`
+ * `"stadia-osm-bright"`
+
+> In a future release of this extension, stamen layers may be added to the above list. Currently they're not because stadia is allowing stamen tile access without an API key.
+
+## map.preview.apikeys.bing
+
+> This setting was introduced in `0.6.0`
+
+Type: `string`
+
+Default Value: `null`
+
+Description: The Bing Maps API key. If not set, the following layer types will not be availabe in the layer switcher:
+
+ * `"bing-aerial"`
+ * `"bing-aerial-with-label"`
+ * `"bing-road"`
+ * `"bing-canvas-dark"`
 
 ## map.preview.debug.dumpContentPath
 
