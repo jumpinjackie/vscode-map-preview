@@ -389,7 +389,7 @@ async function setupLayers(previewSettings) {
             type: 'base',
             visible: (previewSettings.defaultBaseLayer == "stadia-outdoors"),
             source: new ol.source.StadiaMaps ({
-                layer: 'stadia_outdoors',
+                layer: 'outdoors',
                 apiKey: previewSettings.apikeys.stadiamaps
             })
         }));
