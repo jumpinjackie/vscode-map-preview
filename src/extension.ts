@@ -183,23 +183,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
         }
     }
 
-    private cleanText(text: string): string {
-        const scrubRegexes = [
-            { regex: /\\/g, replace: "\\\\" },                      //Existing backslashes
-            { regex: /(<\!\[CDATA\[[\s\S]*?]]>)/g, replace: "" },   //CDATA blocks in XML
-            { regex: /`/g, replace: "\\`" },                        //Backticks
-            { regex: /\${/g, replace: "\\${" }                      //Start of ES6 template string placeholder
-        ];
-        for (const r of scrubRegexes) {
-            text = text.replace(r.regex, r.replace);
-        }
-        return text;
-    }
-
     private createMapPreview(doc: vscode.TextDocument, projection: string = null) {
-        //Should we languageId check here?
-        const text = this.cleanText(doc.getText());
-    
         const config = vscode.workspace.getConfiguration("map.preview");
         /*
         //We cannot proceed if default base layer is one that requires API keys and no API key has been provided
