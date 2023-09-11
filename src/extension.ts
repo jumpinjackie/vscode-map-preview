@@ -274,6 +274,7 @@ function loadWebView(content: PreviewDocumentContentProvider, previewUri: vscode
             // Restrict the webview to only loading content from our extension's `static` directory.
             localResourceRoots: [
                 vscode.Uri.file(path.join(extensionPath, 'static')),
+                // IMPORTANT: Otherwise our generated HTML cannot fetch() this document's content
                 vscode.Uri.file(docDir)
             ]
         }
