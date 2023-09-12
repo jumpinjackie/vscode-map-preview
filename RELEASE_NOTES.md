@@ -7,9 +7,16 @@
    * ol-layerswitcher (git: `46cfb40`)
  * [#60](https://github.com/jumpinjackie/vscode-map-preview/issues/60): Added support for Stadia Maps
    * Stamen layers are now accessed through Stadia Maps
-   * Stadia Maps API key required to access certain layer types. Currently Stamen layers do not require API key access. This may change in the future.
+   * Stadia Maps API key required to access certain layer types (certain layers will not be available in the base layer switcher if key is not specified). Currently Stamen layers do not require API key access. This may change in the future.
+ * The default visible base layer for map previews (unless configured otherwise) is now `osm` (OpenStreetMap)
  * [#46](https://github.com/jumpinjackie/vscode-map-preview/issues/46): Added support for Bing Maps
-   * Bing Maps API key required to access any bing layers
+   * Bing Maps API key required to access any bing layers. Such layers are not available in base layer switcher if key not specified.
+ * [#3](https://github.com/jumpinjackie/vscode-map-preview/issues/3): New configuration settings to define custom base layers. Supported base layer types are:
+   * `XYZ`
+   * `WMTS`
+ * [#4](https://github.com/jumpinjackie/vscode-map-preview/issues/4): Document (to be previewed) content is now fetched by the viewer HTML instead of being embedded into the viewer HTML, improving responsiveness on larger files
+   * [#14](https://github.com/jumpinjackie/vscode-map-preview/issues/14): Content escaping code removed as a result. DOMPurify still used for sections sensitive to un-trusted content.
+ * [#28](https://github.com/jumpinjackie/vscode-map-preview/issues/28): Error now shown if previewing files bigger than VSCode's file size limit for (syntax highlighting / tokenization)
 
 # 0.5.9
 
