@@ -42,8 +42,9 @@ Description: The Stadia Maps API key. If not set, the following layer types will
  * `"stadia-alidade-smooth-dark"`
  * `"stadia-outdoors"`
  * `"stadia-osm-bright"`
-
-> In a future release of this extension, stamen layers may be added to the above list. Currently they're not because stadia is allowing stamen tile access without an API key.
+ * `"stamen-toner"` (as of `0.7.0`)
+ * `"stamen-terrain"` (as of `0.7.0`)
+ * `"stamen-water"` (as of `0.7.0`)
 
 ## map.preview.apikeys.bing
 

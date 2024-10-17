@@ -1,3 +1,9 @@
+# 0.7.0
+
+ * [#66](https://github.com/jumpinjackie/vscode-map-preview/issues/66)
+   * OpenLayers updated to `10.2.1`
+   * Stamen layers now require stadia maps API key in settings, so these layers are now hidden if this API key is not set.
+
 # 0.6.0
 
  * [#59](https://github.com/jumpinjackie/vscode-map-preview/issues/59): Package updates:

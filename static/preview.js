@@ -338,34 +338,34 @@ async function setupLayers(previewSettings) {
         }
     }
 
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stamen Toner',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'stamen_toner',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stamen Watercolor',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stamen-water"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'stamen_watercolor',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
-    baseLayers.push(new ol.layer.Tile({
-        title: 'Stamen Terrain',
-        type: 'base',
-        visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
-        source: new ol.source.StadiaMaps ({
-            layer: 'stamen_terrain',
-            apiKey: previewSettings.apikeys.stadiamaps
-        })
-    }));
     if (previewSettings.apikeys.stadiamaps) {
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stamen Toner',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stamen-toner"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'stamen_toner',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stamen Watercolor',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stamen-water"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'stamen_watercolor',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
+        baseLayers.push(new ol.layer.Tile({
+            title: 'Stamen Terrain',
+            type: 'base',
+            visible: (previewSettings.defaultBaseLayer == "stamen-terrain"),
+            source: new ol.source.StadiaMaps ({
+                layer: 'stamen_terrain',
+                apiKey: previewSettings.apikeys.stadiamaps
+            })
+        }));
         baseLayers.push(new ol.layer.Tile({
             title: 'Stadia Maps Alidade Smooth',
             type: 'base',
