@@ -223,6 +223,7 @@ class PreviewDocumentContentProvider implements vscode.TextDocumentContentProvid
             this.createLocalSource("ol.js", SourceType.SCRIPT) +
             this.createLocalSource("ol-layerswitcher.js", SourceType.SCRIPT) +
             this.createLocalSource("ol-popup.js", SourceType.SCRIPT) +
+            this.createLocalSource("json-format.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.js", SourceType.SCRIPT) +
             this.createLocalSource("preview.css", SourceType.STYLE) +
             `<script nonce="${this._wctx.getScriptNonce()}" type="text/javascript">

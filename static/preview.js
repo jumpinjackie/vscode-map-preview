@@ -128,6 +128,7 @@ function createPreviewSource(previewContent, formatOptions, previewSettings, cal
         ol.proj.proj4.register(proj4);
     }
     let formats = {
+        "JSON": JSONFormat,
         "GPX": ol.format.GPX,
         "GeoJSON": ol.format.GeoJSON,
         "IGC": ol.format.IGC,
